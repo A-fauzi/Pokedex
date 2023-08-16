@@ -39,6 +39,27 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         tools:src="@drawable/poke_example_img" />
+
+                    <TextView
+                        android:id="@+id/tv_id_format"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="#0001"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="@dimen/margin_root"/>
+                    
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_type_poke"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/item_type_poke"
+                        android:orientation="horizontal"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
                 </RelativeLayout>
 
                 <androidx.appcompat.widget.Toolbar
