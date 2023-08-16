@@ -3,5 +3,7 @@
     <dimen name="padding_root">16dp</dimen>
     <dimen name="height_space_view_vertical">8dp</dimen>
     <dimen name="text_size_title">24sp</dimen>
+    <dimen name="text_size_title_name">18dp</dimen>
+    <dimen name="text_size_title_name_Detail">32dp</dimen>
     <dimen name="card_corner">16dp</dimen>
 </resources>

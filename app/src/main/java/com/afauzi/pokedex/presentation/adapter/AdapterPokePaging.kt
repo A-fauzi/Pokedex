@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.pokedex.databinding.ItemPokeLayoutBinding
 import com.afauzi.pokedex.domain.entity.Pokemon
+import com.afauzi.pokedex.utils.Helpers
 import com.bumptech.glide.Glide
+import java.util.*
 
 class AdapterPokePaging(
     private val context: Context,
@@ -30,15 +32,14 @@ class AdapterPokePaging(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder) {
             with(getItem(position)) {
-
                 val parts = this?.url?.split("/")
-                val pokeId = parts?.get(parts.size - 2).toString()
 
                 val name = this?.name
+                val pokeId = parts?.get(parts.size - 2).toString()
 
-                binding.characterName.text = name
+                binding.characterName.text = Helpers.capitalizeChar(name.toString())
                 Glide.with(context)
-                    .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$pokeId.png")
+                    .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokeId}.png")
                     .into(binding.itemImgPoke)
 
                 binding.cardItem.setOnClickListener {

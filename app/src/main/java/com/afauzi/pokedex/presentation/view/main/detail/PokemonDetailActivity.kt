@@ -13,6 +13,8 @@ import com.afauzi.pokedex.databinding.ActivityPokemonDetailBinding
 import com.afauzi.pokedex.presentation.adapter.AdapterPokePaging
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
 import com.afauzi.pokedex.presentation.presenter.viewmodelfactory.PokeViewModelFactory
+import com.afauzi.pokedex.utils.Helpers
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 
 class PokemonDetailActivity : AppCompatActivity() {
@@ -35,12 +37,17 @@ class PokemonDetailActivity : AppCompatActivity() {
 
 
 
-        val pokeName = intent.getStringExtra("pokeName")
+        val pokeName = intent.getStringExtra("pokeName").toString()
+
         lifecycleScope.launch {
             pokeViewModel.pokeDetail.observe(this@PokemonDetailActivity) {
-                Log.d("PokemonDetail", it.toString())
+                Log.d("PokeDetail", it.toString())
+                binding.collapsingToolbar.title = Helpers.capitalizeChar(pokeName)
+                Glide.with(this@PokemonDetailActivity)
+                    .load(it.sprites?.other?.home?.frontDefault)
+                    .into(binding.imgPokemonCharacter)
             }
-            pokeViewModel.getPokeDetail(pokeName ?: "")
+            pokeViewModel.getPokeDetail(pokeName)
         }
     }
 }
