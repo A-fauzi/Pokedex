@@ -2,27 +2,21 @@ package com.afauzi.pokedex.presentation.view.main.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.map
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.afauzi.pokedex.R
 import com.afauzi.pokedex.data.datasource.remote.PokeApiProvider
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
 import com.afauzi.pokedex.data.repository_implement.PokemonRepository
-import com.afauzi.pokedex.databinding.ActivityPokemonDetailBinding
 import com.afauzi.pokedex.databinding.FragmentHomeBinding
 import com.afauzi.pokedex.presentation.adapter.AdapterPokePaging
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
 import com.afauzi.pokedex.presentation.presenter.viewmodelfactory.PokeViewModelFactory
-import com.afauzi.pokedex.presentation.view.main.detail.PokemonDetailActivity
+import com.afauzi.pokedex.presentation.view.detail.PokemonDetailActivity
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(), AdapterPokePaging.ListenerPokeAdapter {

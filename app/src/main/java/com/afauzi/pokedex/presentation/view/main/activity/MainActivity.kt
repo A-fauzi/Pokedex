@@ -1,4 +1,4 @@
-package com.afauzi.pokedex.presentation.view.main
+package com.afauzi.pokedex.presentation.view.main.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

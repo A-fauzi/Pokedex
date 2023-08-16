@@ -1,8 +1,8 @@
-package com.afauzi.pokedex.presentation.view.main.detail
+package com.afauzi.pokedex.presentation.view.detail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,12 +10,14 @@ import com.afauzi.pokedex.data.datasource.remote.PokeApiProvider
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
 import com.afauzi.pokedex.data.repository_implement.PokemonRepository
 import com.afauzi.pokedex.databinding.ActivityPokemonDetailBinding
-import com.afauzi.pokedex.domain.entity.Type
 import com.afauzi.pokedex.presentation.adapter.AdapterTypePoke
+import com.afauzi.pokedex.presentation.adapter.AdapterViewPagerPokeDetail
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
 import com.afauzi.pokedex.presentation.presenter.viewmodelfactory.PokeViewModelFactory
 import com.afauzi.pokedex.utils.Helpers
 import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 
 class PokemonDetailActivity : AppCompatActivity() {
@@ -62,5 +64,18 @@ class PokemonDetailActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@PokemonDetailActivity, LinearLayoutManager.HORIZONTAL, false)
             adapter = adapterTypePoke
         }
+
+
+        val itemTabs = arrayOf("About", "Statistic")
+        val viewPager = binding.viewPager
+        val tabLayout = binding.tabLayout
+
+        val adapterViewPager = AdapterViewPagerPokeDetail(supportFragmentManager, lifecycle)
+        viewPager.adapter = adapterViewPager
+
+        TabLayoutMediator(tabLayout, viewPager) {tab, position ->
+            tab.text = itemTabs[position]
+        }.attach()
+
     }
 }

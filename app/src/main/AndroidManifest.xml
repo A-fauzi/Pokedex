@@ -16,14 +16,14 @@
         android:theme="@style/Theme.Pokedex"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.view.main.detail.PokemonDetailActivity"
+            android:name=".presentation.view.detail.PokemonDetailActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".presentation.view.main.MainActivity"
+            android:name=".presentation.view.main.activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
