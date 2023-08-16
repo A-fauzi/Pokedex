@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/name_poke"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginBottom="@dimen/margin_root">
+
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Species"/>
+
+    <Space
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tv_name_poke"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Data Species"
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
+</LinearLayout>

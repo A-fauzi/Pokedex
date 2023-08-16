@@ -81,8 +81,9 @@ dependencies {
 
     // Room
     def room_version = "2.4.3"
-
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
+    // Chart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

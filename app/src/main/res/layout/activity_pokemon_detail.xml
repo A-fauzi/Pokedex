@@ -99,7 +99,14 @@
                         android:id="@+id/viewPager"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"/>
+
+                    <include
+                        layout="@layout/fragment_infor_poke"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
 
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>

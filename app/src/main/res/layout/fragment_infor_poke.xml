@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/padding_root"
     tools:context=".presentation.view.detail.fragment.InfoPokeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Pokemon Info" />
+        android:orientation="vertical">
 
-</FrameLayout>
+        <!--    name    -->
+        <include
+            android:id="@+id/included_view_name"
+            layout="@layout/item_view_info_poke" />
+
+        <!--   Height    -->
+        <include
+            android:id="@+id/included_view_height"
+            layout="@layout/item_view_info_poke" />
+
+        <!--   Weight    -->
+        <include
+            android:id="@+id/included_view_weight"
+            layout="@layout/item_view_info_poke" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

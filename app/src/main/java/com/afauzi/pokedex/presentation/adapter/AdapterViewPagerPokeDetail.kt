@@ -4,10 +4,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.afauzi.pokedex.presentation.view.detail.fragment.AbilityPokeFragment
 import com.afauzi.pokedex.presentation.view.detail.fragment.InfoPokeFragment
 import com.afauzi.pokedex.presentation.view.detail.fragment.StatisticsPokeFragment
 
-private const val NUM_TABS = 2
+private const val NUM_TABS = 3
 
 class AdapterViewPagerPokeDetail(
     fragmentManager: FragmentManager,
@@ -20,7 +21,7 @@ class AdapterViewPagerPokeDetail(
             0 -> return InfoPokeFragment()
             1 -> return StatisticsPokeFragment()
         }
-        return InfoPokeFragment()
+        return AbilityPokeFragment()
     }
 
 }

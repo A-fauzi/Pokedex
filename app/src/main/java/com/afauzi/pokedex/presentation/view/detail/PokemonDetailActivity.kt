@@ -66,7 +66,7 @@ class PokemonDetailActivity : AppCompatActivity() {
         }
 
 
-        val itemTabs = arrayOf("About", "Statistic")
+        val itemTabs = arrayOf("About", "Statistic", "Ability")
         val viewPager = binding.viewPager
         val tabLayout = binding.tabLayout
 
