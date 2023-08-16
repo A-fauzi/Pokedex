@@ -1,15 +1,22 @@
 package com.afauzi.pokedex.presentation.adapter
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.afauzi.pokedex.R
 import com.afauzi.pokedex.databinding.ItemPokeLayoutBinding
 import com.afauzi.pokedex.domain.entity.Pokemon
 import com.afauzi.pokedex.utils.Helpers
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import java.util.*
 
 class AdapterPokePaging(
@@ -41,6 +48,34 @@ class AdapterPokePaging(
                 Glide.with(context)
                     .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokeId}.png")
                     .into(binding.itemImgPoke)
+
+                // Palette Color
+                Glide.with(context)
+                    .asBitmap()
+                    .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokeId}.png")
+                    .into(object : CustomTarget<Bitmap>() {
+                        override fun onResourceReady(
+                            resource: Bitmap,
+                            transition: Transition<in Bitmap>?
+                        ) {
+                            Palette.from(resource).generate { palette ->
+                                palette.let {
+                                    // Mendapatkan warna yang Anda inginkan dari objek Palette, misalnya warna dominan
+                                    val dominantColor = palette?.getDominantColor(ContextCompat.getColor(context, R.color.blue))
+
+                                    // Gunakan warna yang diambil untuk mengatur tampilan UI Anda
+                                    if (dominantColor != null) {
+                                        binding.llBgCard.setBackgroundColor(dominantColor)
+                                    }
+                                }
+                            }
+                        }
+
+                        override fun onLoadCleared(placeholder: Drawable?) {
+                            // Do nothing or handle placeholder
+                        }
+
+                    })
 
                 binding.cardItem.setOnClickListener {
                     listenerPokeAdapter.onClickListenerAdapter(name ?: "")

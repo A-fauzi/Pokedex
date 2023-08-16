@@ -2,6 +2,7 @@ package com.afauzi.pokedex.data.repository_implement
 
 import android.util.Log
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
+import com.afauzi.pokedex.domain.entity.PokeAbility
 import com.afauzi.pokedex.domain.entity.PokeDetail
 
 class PokemonRepository(private val pokeApiService: PokeApiService) {
@@ -12,6 +13,15 @@ class PokemonRepository(private val pokeApiService: PokeApiService) {
             return response.body()
         } else {
             throw Exception("Error Retrieving Pokemon Detail")
+        }
+    }
+
+    suspend fun getPokeAbility(abilityName: String): PokeAbility? {
+        val response = pokeApiService.getPokeAbility(abilityName)
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            throw Exception("Error Retrieving Pokemon Ability")
         }
     }
 }

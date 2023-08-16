@@ -1,11 +1,19 @@
 package com.afauzi.pokedex.presentation.view.detail
 
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
+import android.view.Window
+import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.afauzi.pokedex.R
 import com.afauzi.pokedex.data.datasource.remote.PokeApiProvider
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
 import com.afauzi.pokedex.data.repository_implement.PokemonRepository
@@ -16,9 +24,11 @@ import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
 import com.afauzi.pokedex.presentation.presenter.viewmodelfactory.PokeViewModelFactory
 import com.afauzi.pokedex.utils.Helpers
 import com.bumptech.glide.Glide
-import com.google.android.material.tabs.TabLayout
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
+
 
 class PokemonDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPokemonDetailBinding
@@ -53,9 +63,44 @@ class PokemonDetailActivity : AppCompatActivity() {
 
                 binding.tvIdFormat.text = formattedId
                 binding.collapsingToolbar.title = Helpers.capitalizeChar(pokeName)
+
                 Glide.with(this@PokemonDetailActivity)
                     .load(it.sprites?.other?.home?.frontDefault)
                     .into(binding.imgPokemonCharacter)
+
+                // Palette Color
+                Glide.with(this@PokemonDetailActivity)
+                    .asBitmap()
+                    .load(it.sprites?.other?.home?.frontDefault)
+                    .into(object : CustomTarget<Bitmap>() {
+                        override fun onResourceReady(
+                            resource: Bitmap,
+                            transition: Transition<in Bitmap>?
+                        ) {
+                            Palette.from(resource).generate {palette ->
+                                palette.let {
+                                    // Mendapatkan warna yang Anda inginkan dari objek Palette, misalnya warna dominan
+                                    val dominantColor = palette?.getDominantColor(ContextCompat.getColor(this@PokemonDetailActivity, R.color.blue))
+
+                                    // Gunakan warna yang diambil untuk mengatur tampilan UI Anda
+                                    if (dominantColor != null) {
+                                        binding.appBar.setBackgroundColor(dominantColor)
+
+                                        val window: Window = window
+                                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                                        window.statusBarColor = dominantColor
+
+                                        binding.collapsingToolbar.setContentScrimColor(dominantColor)
+                                    }
+                                }
+                            }
+                        }
+
+                        override fun onLoadCleared(placeholder: Drawable?) {
+                            // Do nothing or handle placeholder
+                        }
+
+                    })
             }
             pokeViewModel.getPokeDetail(pokeName)
         }

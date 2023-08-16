@@ -4,9 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.pokedex.databinding.ItemTypePokeBinding
-import com.afauzi.pokedex.domain.entity.PokeDetail
-import com.afauzi.pokedex.domain.entity.PokemonList
-import com.afauzi.pokedex.domain.entity.Type
 import com.afauzi.pokedex.domain.entity.TypesItem
 import com.afauzi.pokedex.utils.Helpers
 

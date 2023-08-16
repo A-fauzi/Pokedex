@@ -11,6 +11,7 @@ import androidx.paging.cachedIn
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
 import com.afauzi.pokedex.data.repository_implement.PokemonPagingSource
 import com.afauzi.pokedex.data.repository_implement.PokemonRepository
+import com.afauzi.pokedex.domain.entity.PokeAbility
 import com.afauzi.pokedex.domain.entity.PokeDetail
 import kotlinx.coroutines.launch
 
@@ -37,4 +38,18 @@ class PokeViewModel(
             }
         }
     }
+
+    private val _pokeAbility = MutableLiveData<PokeAbility>()
+    val pokeAbility: LiveData<PokeAbility>
+        get() = _pokeAbility
+    fun getPokeAbility(abilityName: String) {
+        viewModelScope.launch {
+            try {
+                _pokeAbility.value = pokemonRepository.getPokeAbility(abilityName)
+            }catch (e: Exception) {
+                Log.e("PokeViewModel", "Error retrieving poke ability", e)
+            }
+        }
+    }
+
 }

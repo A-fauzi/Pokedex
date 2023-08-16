@@ -67,7 +67,7 @@ class StatisticsPokeFragment : Fragment() {
                 entries.add(BarEntry(5f, it.stats[0]?.baseStat!!.toFloat())) // hp
 
                 val barDataSet = BarDataSet(entries, "Pokemon Statistic")
-                barDataSet.color = Color.BLUE
+                barDataSet.color = resources.getColor(R.color.blue)
 
                 val dataSets: ArrayList<IBarDataSet> = ArrayList()
                 dataSets.add(barDataSet)
