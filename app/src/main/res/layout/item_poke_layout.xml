@@ -4,39 +4,29 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="@dimen/card_corner"
-    android:layout_margin="@dimen/height_space_view_vertical">
+    android:layout_margin="@dimen/height_space_view_vertical"
+    android:id="@+id/card_item"
+    android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="@dimen/padding_root"
-        android:background="@color/blue">
+        android:orientation="vertical"
+        android:background="@color/blue"
+        android:gravity="center">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/character_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/character_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Charmander"
-                android:textColor="@color/white"
-                android:textStyle="bold"/>
-
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Fire"
-                app:chipSurfaceColor="@android:color/transparent"
-                android:textColor="@color/white"/>
-        </LinearLayout>
+            android:text="Charmander"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:id="@+id/item_img_poke"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="center"
             android:src="@drawable/poke_example_img"/>
     </LinearLayout>
