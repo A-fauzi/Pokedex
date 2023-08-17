@@ -9,4 +9,5 @@
     <dimen name="margin_root">16dp</dimen>
     <dimen name="card_radius">16dp</dimen>
     <dimen name="text_size_standard">12sp</dimen>
+    <dimen name="padding_8">8dp</dimen>
 </resources>

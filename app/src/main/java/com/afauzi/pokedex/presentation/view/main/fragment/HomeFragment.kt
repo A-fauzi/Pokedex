@@ -2,6 +2,7 @@ package com.afauzi.pokedex.presentation.view.main.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -73,6 +74,15 @@ class HomeFragment : Fragment(), AdapterPokePaging.ListenerPokeAdapter {
         val intent = Intent(requireActivity(), PokemonDetailActivity::class.java)
         intent.putExtra("pokeName", name)
         startActivity(intent)
+    }
+
+    override fun onResultDataListener(name: String) {
+        lifecycleScope.launch {
+            pokeViewModel.pokeDetail.observe(viewLifecycleOwner) {
+                it.types?.let { it1 -> adapterPokePaging.setDataItemsType(it1) }
+            }
+            pokeViewModel.getPokeDetail(name)
+        }
     }
 
     private fun initComponentService() {

@@ -9,10 +9,12 @@ import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.pokedex.R
 import com.afauzi.pokedex.databinding.ItemPokeLayoutBinding
 import com.afauzi.pokedex.domain.entity.Pokemon
+import com.afauzi.pokedex.domain.entity.TypesItem
 import com.afauzi.pokedex.utils.Helpers
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
@@ -29,6 +31,8 @@ class AdapterPokePaging(
     private val context: Context,
     private val listenerPokeAdapter: ListenerPokeAdapter
 ) : PagingDataAdapter<Pokemon, AdapterPokePaging.ViewHolder>(PokeDiffComp) {
+
+    private lateinit var adapterTypePoke: AdapterTypePoke
 
     // Objek yang mengimplementasikan DiffUtil.ItemCallback untuk membandingkan item.
     object PokeDiffComp : DiffUtil.ItemCallback<Pokemon>() {
@@ -72,9 +76,7 @@ class AdapterPokePaging(
                                     val dominantColor = palette.getDominantColor(ContextCompat.getColor(context, R.color.blue))
 
                                     // Gunakan warna yang diambil untuk mengatur tampilan UI Anda
-                                    if (dominantColor != null) {
-                                        binding.llBgCard.setBackgroundColor(dominantColor)
-                                    }
+                                    binding.llBgCard.setBackgroundColor(dominantColor)
                                 }
                             }
                         }
@@ -86,6 +88,15 @@ class AdapterPokePaging(
 
                 binding.cardItem.setOnClickListener {
                     listenerPokeAdapter.onClickListenerAdapter(name ?: "")
+                }
+
+                listenerPokeAdapter.onResultDataListener(name ?: "")
+
+
+                adapterTypePoke = AdapterTypePoke(arrayListOf())
+                binding.rvTypePoke.apply {
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                    adapter = adapterTypePoke
                 }
             }
         }
@@ -100,5 +111,10 @@ class AdapterPokePaging(
     // Interface untuk mendengarkan aksi klik pada item adapter.
     interface ListenerPokeAdapter {
         fun onClickListenerAdapter(name: String)
+        fun onResultDataListener(name: String)
+    }
+
+    fun setDataItemsType(data: List<TypesItem?>) {
+        adapterTypePoke.setData(data)
     }
 }

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     app:cardCornerRadius="@dimen/card_corner"
     android:layout_margin="@dimen/height_space_view_vertical"
     android:id="@+id/card_item"
@@ -14,16 +15,29 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/blue"
-        android:gravity="center">
+        android:gravity="center"
+        android:padding="@dimen/padding_8">
 
-        <TextView
-            android:id="@+id/character_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Charmander"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_title_name"
-            android:textStyle="bold"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/character_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Charmander"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/pokemon_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="#0001"
+                android:textColor="@color/white"
+                android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/item_img_poke"
@@ -31,5 +45,14 @@
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:src="@drawable/poke_example_img"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_type_poke"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_type_poke"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

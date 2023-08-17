@@ -130,7 +130,7 @@ class ComparePokemon : Fragment(), AdapterSearchPokePaging.ListenerPokeAdapter {
 
     @SuppressLint("SetTextI18n")
     private fun setDataToViewAsync(pokeDetail: PokeDetail, dataCompareView: ItemComparisonPokeBinding) {
-        dataCompareView.tvNamePokemon.text = pokeDetail.name
+        dataCompareView.tvNamePokemon.text = pokeDetail.name?.capitalize()
         Glide.with(requireActivity())
             .load(pokeDetail.sprites?.other?.home?.frontDefault)
             .into(dataCompareView.ivPokemon)
