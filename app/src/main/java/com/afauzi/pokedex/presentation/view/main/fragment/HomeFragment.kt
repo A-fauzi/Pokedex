@@ -19,6 +19,9 @@ import com.afauzi.pokedex.presentation.presenter.viewmodelfactory.PokeViewModelF
 import com.afauzi.pokedex.presentation.view.detail.PokemonDetailActivity
 import kotlinx.coroutines.launch
 
+/**
+ * Fragment untuk menampilkan daftar Pokemon di tampilan beranda.
+ */
 class HomeFragment : Fragment(), AdapterPokePaging.ListenerPokeAdapter {
 
     private lateinit var binding: FragmentHomeBinding
@@ -35,6 +38,7 @@ class HomeFragment : Fragment(), AdapterPokePaging.ListenerPokeAdapter {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
 
+        // Menginisialisasi layanan, repository, adapter, dan ViewModel
         pokeApiService = PokeApiProvider.providePokeApiService()
         pokemonRepository = PokemonRepository(pokeApiService)
         adapterPokePaging = AdapterPokePaging(requireActivity(), this)
@@ -47,13 +51,13 @@ class HomeFragment : Fragment(), AdapterPokePaging.ListenerPokeAdapter {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Mengatur ViewModel dan RecyclerView saat tampilan sudah dibuat
         setUpViewModel()
         setUpRecyclerView()
     }
 
-
+    // Mengatur ViewModel dengan mengamati data dan mengirimkannya ke adapter
     private fun setUpViewModel() {
-
         lifecycleScope.launch {
             pokeViewModel.listDataPoke.collect { pagingData ->
                 adapterPokePaging.submitData(pagingData)
@@ -61,6 +65,7 @@ class HomeFragment : Fragment(), AdapterPokePaging.ListenerPokeAdapter {
         }
     }
 
+    // Mengatur RecyclerView dengan mengatur layoutManager dan adapter
     private fun setUpRecyclerView() {
         binding.rvPokemon.apply {
             layoutManager = GridLayoutManager(requireActivity(), 2)
@@ -68,9 +73,11 @@ class HomeFragment : Fragment(), AdapterPokePaging.ListenerPokeAdapter {
         }
     }
 
+    // Implementasi dari ListenerPokeAdapter untuk menghandle klik pada item Pokemon
     override fun onClickListenerAdapter(name: String) {
         val intent = Intent(requireActivity(), PokemonDetailActivity::class.java)
         intent.putExtra("pokeName", name)
         startActivity(intent)
     }
 }
+

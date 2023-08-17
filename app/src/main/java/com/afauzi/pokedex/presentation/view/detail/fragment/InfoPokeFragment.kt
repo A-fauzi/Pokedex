@@ -20,9 +20,13 @@ import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
 import com.afauzi.pokedex.presentation.presenter.viewmodelfactory.PokeViewModelFactory
 import kotlinx.coroutines.launch
 
+/**
+ * Fragment untuk menampilkan informasi detail Pokemon.
+ */
 class InfoPokeFragment : Fragment() {
     private lateinit var binding: FragmentInforPokeBinding
 
+    // Deklarasi ViewModel, Repository, dan ViewModelFactory
     private lateinit var pokeViewModel: PokeViewModel
     private lateinit var pokeViewModelFactory: PokeViewModelFactory
     private lateinit var pokeApiService: PokeApiService
@@ -35,9 +39,14 @@ class InfoPokeFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentInforPokeBinding.inflate(layoutInflater, container, false)
 
+        // Menginisialisasi layanan dan repository
         pokeApiService = PokeApiProvider.providePokeApiService()
         pokemonRepository = PokemonRepository(pokeApiService)
+
+        // Membuat ViewModelFactory dengan repository dan layanan
         pokeViewModelFactory = PokeViewModelFactory(pokemonRepository, pokeApiService)
+
+        // Membuat instance ViewModel menggunakan ViewModelProvider
         pokeViewModel = ViewModelProvider(this, pokeViewModelFactory)[PokeViewModel::class.java]
 
         return binding.root
@@ -48,23 +57,25 @@ class InfoPokeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val pokeName = requireActivity().intent.getStringExtra("pokeName").toString()
 
+        // Mengamati data dari ViewModel menggunakan lifecycleScope
         lifecycleScope.launch {
-            pokeViewModel.pokeDetail.observe(requireActivity()) {
-
-                // TextView Keys
+            pokeViewModel.pokeDetail.observe(requireActivity()) { pokeDetail ->
+                // Mengatur teks untuk TextView
                 binding.includedViewName.tvText.text = "Name"
                 binding.includedViewHeight.tvText.text = "Height"
                 binding.includedViewWeight.tvText.text = "Weight"
 
+                // Menghitung tinggi dan berat dalam unit yang sesuai
+                val height = pokeDetail.height?.div(100.0)
+                val weight = pokeDetail.weight?.div(10.0)
 
-                val height = it.height?.div(100.0)
-                val weight = it.weight?.div(10.0)
-                // TextViews Value
-                binding.includedViewName.tvNamePoke.text = it.name
+                // Mengisi TextViews dengan nilai dari Pokemon detail
+                binding.includedViewName.tvNamePoke.text = pokeDetail.name
                 binding.includedViewHeight.tvNamePoke.text = "$height m"
                 binding.includedViewWeight.tvNamePoke.text = "$weight kgs"
             }
 
+            // Memanggil fungsi untuk mendapatkan detail Pokemon
             pokeViewModel.getPokeDetail(pokeName)
         }
     }

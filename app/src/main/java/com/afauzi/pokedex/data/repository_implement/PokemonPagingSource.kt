@@ -7,31 +7,54 @@ import com.afauzi.pokedex.domain.entity.Pokemon
 
 class PokemonPagingSource(private val pokeApiService: PokeApiService) :
     PagingSource<Int, Pokemon>() {
-    override fun getRefreshKey(state: PagingState<Int, Pokemon>): Int? {
-        TODO("Not yet implemented")
+
+    /**
+     * Implementasi fungsi untuk mendapatkan kunci halaman pertama yang digunakan untuk refresh data.
+     *
+     * @param state Objek PagingState yang menyimpan informasi tentang status halaman saat ini.
+     * @return Kunci halaman pertama yang akan digunakan untuk refresh data.
+     */
+    override fun getRefreshKey(state: PagingState<Int, Pokemon>): Int {
+        // Mengembalikan kunci halaman pertama (0) untuk melakukan refresh data.
+        return 0
     }
 
+
+    /**
+     * Implementasi fungsi untuk memuat halaman data Pokemon menggunakan Paging 3 library.
+     *
+     * @param params Parameter LoadParams yang menyediakan informasi tentang halaman yang akan dimuat.
+     * @return LoadResult berisi data halaman, key halaman sebelumnya, dan key halaman berikutnya.
+     */
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Pokemon> {
         return try {
+            // Mendapatkan nomor halaman yang akan dimuat.
             val currentLoadingPageKey = params.key ?: 0
+
+            // Mengirim permintaan HTTP untuk mengambil daftar Pokemon dengan offset yang sesuai.
             val response = pokeApiService.getPokemonList(offset = currentLoadingPageKey)
+
+            // Menampung data Pokemon dalam daftar responseData.
             val responseData = mutableListOf<Pokemon>()
             val data = response.body()?.results
-            data.let {
-                if (it != null) {
-                    responseData.addAll(it)
-                }
+            data?.let {
+                responseData.addAll(it)
             }
 
+            // Menghitung key halaman sebelumnya dan key halaman berikutnya.
             val prevKey = if (currentLoadingPageKey > 0) currentLoadingPageKey - 25 else null
-            val nextKey = if (responseData.isNotEmpty()) currentLoadingPageKey.plus(25) else null
+            val nextKey = if (responseData.isNotEmpty()) currentLoadingPageKey + 25 else null
+
+            // Mengembalikan LoadResult.Page dengan data halaman, key halaman sebelumnya, dan key halaman berikutnya.
             LoadResult.Page(
                 data = responseData,
                 prevKey = prevKey,
                 nextKey = nextKey
             )
         } catch (e: Exception) {
-            return LoadResult.Error(e)
+            // Jika terjadi kesalahan, mengembalikan LoadResult.Error dengan Exception.
+            LoadResult.Error(e)
         }
     }
+
 }

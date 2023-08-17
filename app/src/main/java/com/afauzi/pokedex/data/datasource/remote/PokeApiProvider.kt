@@ -8,9 +8,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 object PokeApiProvider {
     private const val BASE_URL = "https://pokeapi.co/api/v2/"
 
-    /**
-     *  Mendefinisikan sebuah instance dari OkHttpClient.Builder untuk konfigurasi klien HTTP.
-     */
     private val httpClient = OkHttpClient.Builder()
 
         // Menambahkan sebuah interceptor untuk melakukan logging HTTP.
@@ -24,9 +21,6 @@ object PokeApiProvider {
         .build()
 
 
-    /**
-     * Mendefinisikan instance dari Retrofit untuk menghubungkan antara antarmuka API dan klien HTTP.
-     */
     private val retrofit = Retrofit.Builder()
 
         // Mengatur URL dasar (base URL) dari API yang akan diakses.

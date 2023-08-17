@@ -30,6 +30,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 
 
+/**
+ * Activity yang menampilkan detail informasi tentang suatu pokemon.
+ */
 class PokemonDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPokemonDetailBinding
     private lateinit var pokeViewModel: PokeViewModel
@@ -41,26 +44,32 @@ class PokemonDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Inisialisasi antarmuka pengguna dan komponen terkait
         binding = ActivityPokemonDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Inisialisasi adapter untuk tipe pokemon
         adapterTypePoke = AdapterTypePoke(arrayListOf())
+
+        // Inisialisasi layanan API dan repositori
         pokeApiService = PokeApiProvider.providePokeApiService()
         pokemonRepository = PokemonRepository(pokeApiService)
         pokeViewModelFactory = PokeViewModelFactory(pokemonRepository, pokeApiService)
         pokeViewModel = ViewModelProvider(this, pokeViewModelFactory)[PokeViewModel::class.java]
 
-
-
+        // Mendapatkan nama pokemon dari intent
         val pokeName = intent.getStringExtra("pokeName").toString()
 
+        // Menjalankan pemrosesan detail pokemon menggunakan viewModel dan LiveData
         lifecycleScope.launch {
             pokeViewModel.pokeDetail.observe(this@PokemonDetailActivity) {
                 val pokeId = it.id.toString()
                 val formattedId = Helpers.formatIdPoke(pokeId)
 
+                // Mengisi adapter tipe pokemon dengan data tipe
                 it.types?.let { type -> adapterTypePoke.setData(type) }
 
+                // Menampilkan informasi detail pokemon pada antarmuka
                 binding.tvIdFormat.text = formattedId
                 binding.collapsingToolbar.title = Helpers.capitalizeChar(pokeName)
 
@@ -68,7 +77,7 @@ class PokemonDetailActivity : AppCompatActivity() {
                     .load(it.sprites?.other?.home?.frontDefault)
                     .into(binding.imgPokemonCharacter)
 
-                // Palette Color
+                // Mendapatkan warna palet dari gambar dan mengatur tampilan antarmuka berdasarkan warna
                 Glide.with(this@PokemonDetailActivity)
                     .asBitmap()
                     .load(it.sprites?.other?.home?.frontDefault)
@@ -77,12 +86,10 @@ class PokemonDetailActivity : AppCompatActivity() {
                             resource: Bitmap,
                             transition: Transition<in Bitmap>?
                         ) {
-                            Palette.from(resource).generate {palette ->
+                            Palette.from(resource).generate { palette ->
                                 palette.let {
-                                    // Mendapatkan warna yang Anda inginkan dari objek Palette, misalnya warna dominan
                                     val dominantColor = palette?.getDominantColor(ContextCompat.getColor(this@PokemonDetailActivity, R.color.blue))
 
-                                    // Gunakan warna yang diambil untuk mengatur tampilan UI Anda
                                     if (dominantColor != null) {
                                         binding.appBar.setBackgroundColor(dominantColor)
 
@@ -99,18 +106,20 @@ class PokemonDetailActivity : AppCompatActivity() {
                         override fun onLoadCleared(placeholder: Drawable?) {
                             // Do nothing or handle placeholder
                         }
-
                     })
             }
+
+            // Meminta data detail pokemon melalui viewModel
             pokeViewModel.getPokeDetail(pokeName)
         }
 
+        // Menampilkan tipe-tipe pokemon pada recyclerView
         binding.rvTypePoke.apply {
             layoutManager = LinearLayoutManager(this@PokemonDetailActivity, LinearLayoutManager.HORIZONTAL, false)
             adapter = adapterTypePoke
         }
 
-
+        // Konfigurasi ViewPager dan TabLayout untuk menampilkan tampilan fragment yang berbeda
         val itemTabs = arrayOf("About", "Statistic", "Ability")
         val viewPager = binding.viewPager
         val tabLayout = binding.tabLayout
@@ -118,9 +127,8 @@ class PokemonDetailActivity : AppCompatActivity() {
         val adapterViewPager = AdapterViewPagerPokeDetail(supportFragmentManager, lifecycle)
         viewPager.adapter = adapterViewPager
 
-        TabLayoutMediator(tabLayout, viewPager) {tab, position ->
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = itemTabs[position]
         }.attach()
-
     }
 }

@@ -20,10 +20,18 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import java.util.*
 
+/**
+ * Adapter khusus untuk menampilkan hasil pencarian Pokemon dengan Paging 3.
+ *
+ * @param context Context dari aplikasi.
+ * @param listenerPokeAdapter Listener yang mendengarkan aksi klik pada item adapter.
+ */
 class AdapterSearchPokePaging(
     private val context: Context,
     private val listenerPokeAdapter: ListenerPokeAdapter
-): PagingDataAdapter<Pokemon, AdapterSearchPokePaging.ViewHolder>(PokeDiffComp) {
+) : PagingDataAdapter<Pokemon, AdapterSearchPokePaging.ViewHolder>(PokeDiffComp) {
+
+    // Objek yang mengimplementasikan DiffUtil.ItemCallback untuk membandingkan item.
     object PokeDiffComp : DiffUtil.ItemCallback<Pokemon>() {
         override fun areItemsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
             return oldItem == newItem
@@ -32,16 +40,16 @@ class AdapterSearchPokePaging(
         override fun areContentsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
             return oldItem == newItem
         }
-
     }
 
-    inner class ViewHolder(val binding: ItemSearchPokeBinding): RecyclerView.ViewHolder(binding.root)
+    // ViewHolder yang mengikat tampilan item pencarian Pokemon.
+    inner class ViewHolder(val binding: ItemSearchPokeBinding) : RecyclerView.ViewHolder(binding.root)
 
+    // Mengikat data Pokemon ke tampilan ViewHolder.
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder) {
             with(getItem(position)) {
                 val parts = this?.url?.split("/")
-
                 val name = this?.name
                 val pokeId = parts?.get(parts.size - 2).toString()
 
@@ -59,11 +67,13 @@ class AdapterSearchPokePaging(
         }
     }
 
+    // Membuat ViewHolder sesuai dengan tampilan item.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemSearchPokeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
+    // Interface untuk mendengarkan aksi klik pada item adapter.
     interface ListenerPokeAdapter {
         fun onClickListenerAdapter(name: String, image: String)
     }

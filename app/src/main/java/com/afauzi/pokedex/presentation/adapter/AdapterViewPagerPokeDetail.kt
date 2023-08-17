@@ -8,20 +8,34 @@ import com.afauzi.pokedex.presentation.view.detail.fragment.AbilityPokeFragment
 import com.afauzi.pokedex.presentation.view.detail.fragment.InfoPokeFragment
 import com.afauzi.pokedex.presentation.view.detail.fragment.StatisticsPokeFragment
 
-private const val NUM_TABS = 3
-
+/**
+ * Adapter khusus untuk ViewPager dalam tampilan detail Pokemon.
+ *
+ * @param fragmentManager Objek FragmentManager untuk mengelola fragment dalam ViewPager.
+ * @param lifecycle Objek Lifecycle untuk mengatur siklus hidup fragment dalam ViewPager.
+ */
 class AdapterViewPagerPokeDetail(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {
-    override fun getItemCount() = NUM_TABS
+    private val numTabs = 3 // Jumlah tab atau fragment dalam ViewPager.
 
+    /**
+     * Mengembalikan jumlah fragment dalam ViewPager.
+     */
+    override fun getItemCount() = numTabs
+
+    /**
+     * Membuat fragment sesuai dengan posisi yang diberikan.
+     *
+     * @param position Posisi fragment dalam ViewPager.
+     * @return Fragment yang sesuai dengan posisi.
+     */
     override fun createFragment(position: Int): Fragment {
-        when(position) {
-            0 -> return InfoPokeFragment()
-            1 -> return StatisticsPokeFragment()
+        return when (position) {
+            0 -> InfoPokeFragment() // Fragment Info Pokemon.
+            1 -> StatisticsPokeFragment() // Fragment Statistik Pokemon.
+            else -> AbilityPokeFragment() // Fragment Kemampuan Pokemon.
         }
-        return AbilityPokeFragment()
     }
-
 }

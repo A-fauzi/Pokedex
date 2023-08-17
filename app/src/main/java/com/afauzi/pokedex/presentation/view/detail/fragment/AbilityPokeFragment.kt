@@ -25,10 +25,14 @@ import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 
 
+/**
+ * Fragment untuk menampilkan informasi tentang kemampuan Pokemon.
+ */
 class AbilityPokeFragment : Fragment(), AdapterAbilitiesPoke.AdapterAbilityListener {
 
     private lateinit var binding: FragmentAbilityPokeBinding
 
+    // Deklarasi ViewModel, Repository, ViewModelFactory, dan Adapter
     private lateinit var pokeViewModel: PokeViewModel
     private lateinit var pokeViewModelFactory: PokeViewModelFactory
     private lateinit var pokeApiService: PokeApiService
@@ -40,12 +44,21 @@ class AbilityPokeFragment : Fragment(), AdapterAbilitiesPoke.AdapterAbilityListe
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentAbilityPokeBinding.inflate(layoutInflater,  container, false)
+        binding = FragmentAbilityPokeBinding.inflate(layoutInflater, container, false)
+
+        // Membuat instance adapter untuk kemampuan Pokemon
         adapterAbilitiesPoke = AdapterAbilitiesPoke(this, arrayListOf())
+
+        // Menginisialisasi layanan dan repository
         pokeApiService = PokeApiProvider.providePokeApiService()
         pokemonRepository = PokemonRepository(pokeApiService)
+
+        // Membuat ViewModelFactory dengan repository dan layanan
         pokeViewModelFactory = PokeViewModelFactory(pokemonRepository, pokeApiService)
+
+        // Membuat instance ViewModel menggunakan ViewModelProvider
         pokeViewModel = ViewModelProvider(this, pokeViewModelFactory)[PokeViewModel::class.java]
+
         return binding.root
     }
 
@@ -54,23 +67,30 @@ class AbilityPokeFragment : Fragment(), AdapterAbilitiesPoke.AdapterAbilityListe
 
         val pokeName = requireActivity().intent.getStringExtra("pokeName").toString()
 
+        // Mengamati data dari ViewModel menggunakan lifecycleScope
         lifecycleScope.launch {
-            pokeViewModel.pokeDetail.observe(requireActivity()) {
-                it.abilities?.let { type -> adapterAbilitiesPoke.setData(type) }
+            pokeViewModel.pokeDetail.observe(requireActivity()) { pokeDetail ->
+                // Menggunakan adapter untuk mengisi daftar kemampuan Pokemon
+                pokeDetail.abilities?.let { abilities -> adapterAbilitiesPoke.setData(abilities) }
             }
+
+            // Memanggil fungsi untuk mendapatkan detail Pokemon
             pokeViewModel.getPokeDetail(pokeName)
         }
 
+        // Mengatur RecyclerView dan adapter untuk daftar kemampuan Pokemon
         binding.rvAbilitiesPoke.apply {
             layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
             adapter = adapterAbilitiesPoke
         }
     }
 
+    // Implementasi dari AdapterAbilitiesPoke.AdapterAbilityListener
     override fun onclickListenerAbility(name: String) {
         lifecycleScope.launch {
-            pokeViewModel.pokeAbility.observe(requireActivity()) {
-                val sortedEntries = it.effectEntries?.filter { effect -> effect?.language?.name == "en"}
+            pokeViewModel.pokeAbility.observe(requireActivity()) { pokeAbility ->
+                // Mengambil dan menampilkan deskripsi kemampuan
+                val sortedEntries = pokeAbility.effectEntries?.filter { effect -> effect?.language?.name == "en"}
                 sortedEntries?.forEach { effectEntries ->
                     binding.tvAbilityDesc.text = effectEntries?.effect.toString()
                     binding.tvAbilityDesc.setBackgroundColor(ContextCompat.getColor(requireActivity(), R.color.blue))
@@ -78,6 +98,7 @@ class AbilityPokeFragment : Fragment(), AdapterAbilitiesPoke.AdapterAbilityListe
                 }
             }
 
+            // Memanggil fungsi untuk mendapatkan informasi kemampuan Pokemon
             pokeViewModel.getPokeAbility(name)
         }
     }
