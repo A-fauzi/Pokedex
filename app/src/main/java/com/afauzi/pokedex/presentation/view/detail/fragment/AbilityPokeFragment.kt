@@ -16,6 +16,7 @@ import com.afauzi.pokedex.data.datasource.remote.PokeApiProvider
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
 import com.afauzi.pokedex.data.repository_implement.PokemonRepository
 import com.afauzi.pokedex.databinding.FragmentAbilityPokeBinding
+import com.afauzi.pokedex.domain.entity.PokeAbility
 import com.afauzi.pokedex.presentation.adapter.AdapterAbilitiesPoke
 import com.afauzi.pokedex.presentation.adapter.AdapterTypePoke
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
@@ -46,18 +47,7 @@ class AbilityPokeFragment : Fragment(), AdapterAbilitiesPoke.AdapterAbilityListe
         // Inflate the layout for this fragment
         binding = FragmentAbilityPokeBinding.inflate(layoutInflater, container, false)
 
-        // Membuat instance adapter untuk kemampuan Pokemon
-        adapterAbilitiesPoke = AdapterAbilitiesPoke(this, arrayListOf())
-
-        // Menginisialisasi layanan dan repository
-        pokeApiService = PokeApiProvider.providePokeApiService()
-        pokemonRepository = PokemonRepository(pokeApiService)
-
-        // Membuat ViewModelFactory dengan repository dan layanan
-        pokeViewModelFactory = PokeViewModelFactory(pokemonRepository, pokeApiService)
-
-        // Membuat instance ViewModel menggunakan ViewModelProvider
-        pokeViewModel = ViewModelProvider(this, pokeViewModelFactory)[PokeViewModel::class.java]
+        initComponentService()
 
         return binding.root
     }
@@ -89,17 +79,48 @@ class AbilityPokeFragment : Fragment(), AdapterAbilitiesPoke.AdapterAbilityListe
     override fun onclickListenerAbility(name: String) {
         lifecycleScope.launch {
             pokeViewModel.pokeAbility.observe(requireActivity()) { pokeAbility ->
-                // Mengambil dan menampilkan deskripsi kemampuan
-                val sortedEntries = pokeAbility.effectEntries?.filter { effect -> effect?.language?.name == "en"}
-                sortedEntries?.forEach { effectEntries ->
-                    binding.tvAbilityDesc.text = effectEntries?.effect.toString()
-                    binding.tvAbilityDesc.setBackgroundColor(ContextCompat.getColor(requireActivity(), R.color.blue))
-                    binding.tvAbilityDesc.setTextColor(ContextCompat.getColor(requireActivity(), R.color.white))
-                }
+                setDataToViewAsync(pokeAbility)
             }
 
             // Memanggil fungsi untuk mendapatkan informasi kemampuan Pokemon
             pokeViewModel.getPokeAbility(name)
         }
+    }
+
+    private fun setDataToViewAsync(pokeAbility: PokeAbility) {
+        // Mengambil dan menampilkan deskripsi kemampuan
+        val sortedEntries = pokeAbility.effectEntries?.filter { effect -> effect?.language?.name == "en" }
+
+        sortedEntries?.forEach { effectEntries ->
+            binding.tvAbilityDesc.text = effectEntries?.effect.toString()
+
+            binding.tvAbilityDesc.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireActivity(),
+                    R.color.blue
+                )
+            )
+            binding.tvAbilityDesc.setTextColor(
+                ContextCompat.getColor(
+                    requireActivity(),
+                    R.color.white
+                )
+            )
+        }
+    }
+
+    private fun initComponentService() {
+        // Membuat instance adapter untuk kemampuan Pokemon
+        adapterAbilitiesPoke = AdapterAbilitiesPoke(this, arrayListOf())
+
+        // Menginisialisasi layanan dan repository
+        pokeApiService = PokeApiProvider.providePokeApiService()
+        pokemonRepository = PokemonRepository(pokeApiService)
+
+        // Membuat ViewModelFactory dengan repository dan layanan
+        pokeViewModelFactory = PokeViewModelFactory(pokemonRepository, pokeApiService)
+
+        // Membuat instance ViewModel menggunakan ViewModelProvider
+        pokeViewModel = ViewModelProvider(this, pokeViewModelFactory)[PokeViewModel::class.java]
     }
 }

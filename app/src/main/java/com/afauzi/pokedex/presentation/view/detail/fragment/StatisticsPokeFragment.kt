@@ -46,15 +46,7 @@ class StatisticsPokeFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentStatisticsPokeBinding.inflate(layoutInflater, container, false)
 
-        // Menginisialisasi layanan dan repository
-        pokeApiService = PokeApiProvider.providePokeApiService()
-        pokemonRepository = PokemonRepository(pokeApiService)
-
-        // Membuat ViewModelFactory dengan repository dan layanan
-        pokeViewModelFactory = PokeViewModelFactory(pokemonRepository, pokeApiService)
-
-        // Membuat instance ViewModel menggunakan ViewModelProvider
-        pokeViewModel = ViewModelProvider(this, pokeViewModelFactory)[PokeViewModel::class.java]
+        initComponentService()
 
         // Memanggil fungsi untuk mendapatkan data statistik dan mengisi grafik
         getBarChartData()
@@ -107,5 +99,17 @@ class StatisticsPokeFragment : Fragment() {
             // Memanggil fungsi untuk mendapatkan detail Pokemon
             pokeViewModel.getPokeDetail(pokeName)
         }
+    }
+
+    private fun initComponentService() {
+        // Menginisialisasi layanan dan repository
+        pokeApiService = PokeApiProvider.providePokeApiService()
+        pokemonRepository = PokemonRepository(pokeApiService)
+
+        // Membuat ViewModelFactory dengan repository dan layanan
+        pokeViewModelFactory = PokeViewModelFactory(pokemonRepository, pokeApiService)
+
+        // Membuat instance ViewModel menggunakan ViewModelProvider
+        pokeViewModel = ViewModelProvider(this, pokeViewModelFactory)[PokeViewModel::class.java]
     }
 }

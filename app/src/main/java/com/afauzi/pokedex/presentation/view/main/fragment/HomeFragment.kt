@@ -38,12 +38,7 @@ class HomeFragment : Fragment(), AdapterPokePaging.ListenerPokeAdapter {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
 
-        // Menginisialisasi layanan, repository, adapter, dan ViewModel
-        pokeApiService = PokeApiProvider.providePokeApiService()
-        pokemonRepository = PokemonRepository(pokeApiService)
-        adapterPokePaging = AdapterPokePaging(requireActivity(), this)
-        pokeViewModelFactory = PokeViewModelFactory(pokemonRepository, pokeApiService)
-        pokeViewModel = ViewModelProvider(this, pokeViewModelFactory)[PokeViewModel::class.java]
+        initComponentService()
 
         return binding.root
     }
@@ -78,6 +73,15 @@ class HomeFragment : Fragment(), AdapterPokePaging.ListenerPokeAdapter {
         val intent = Intent(requireActivity(), PokemonDetailActivity::class.java)
         intent.putExtra("pokeName", name)
         startActivity(intent)
+    }
+
+    private fun initComponentService() {
+        // Menginisialisasi layanan, repository, adapter, dan ViewModel
+        pokeApiService = PokeApiProvider.providePokeApiService()
+        pokemonRepository = PokemonRepository(pokeApiService)
+        adapterPokePaging = AdapterPokePaging(requireActivity(), this)
+        pokeViewModelFactory = PokeViewModelFactory(pokemonRepository, pokeApiService)
+        pokeViewModel = ViewModelProvider(this, pokeViewModelFactory)[PokeViewModel::class.java]
     }
 }
 

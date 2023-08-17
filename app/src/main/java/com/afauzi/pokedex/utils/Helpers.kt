@@ -1,5 +1,16 @@
 package com.afauzi.pokedex.utils
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.view.Window
+import android.view.WindowManager
+import androidx.core.content.ContextCompat
+import androidx.palette.graphics.Palette
+import com.afauzi.pokedex.R
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import java.util.*
 
 object Helpers {
@@ -37,6 +48,45 @@ object Helpers {
         }
 
         return formattedId // Mengembalikan hasil format ID.
+    }
+
+    /**
+     * Fungsi yang mengambil gambar dari URL, menggunakan Android Palette untuk menghasilkan warna dominan dari gambar,
+     * dan memanggil fungsi callback untuk mengatur warna latar belakang AppBar.
+     *
+     * @param context Konteks aplikasi atau aktivitas.
+     * @param dataImgUrl URL gambar yang akan diambil warna paletnya.
+     * @param setDominantColorAppBar Callback untuk mengatur warna latar belakang AppBar.
+     */
+    fun objectColorPaletteImg(context: Context, dataImgUrl: String, setDominantColorAppBar: (dominantColor: Int) -> Unit) {
+        Glide.with(context)
+            .asBitmap()
+            .load(dataImgUrl)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    transition: Transition<in Bitmap>?
+                ) {
+                    Palette.from(resource).generate { palette ->
+                        palette.let {
+                            val dominantColor = palette?.getDominantColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.blue
+                                )
+                            )
+
+                            if (dominantColor != null) {
+                                setDominantColorAppBar(dominantColor)
+                            }
+                        }
+                    }
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    // Do nothing or handle placeholder
+                }
+            })
     }
 
 }

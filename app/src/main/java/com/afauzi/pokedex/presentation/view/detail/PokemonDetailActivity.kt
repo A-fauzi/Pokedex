@@ -18,6 +18,7 @@ import com.afauzi.pokedex.data.datasource.remote.PokeApiProvider
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
 import com.afauzi.pokedex.data.repository_implement.PokemonRepository
 import com.afauzi.pokedex.databinding.ActivityPokemonDetailBinding
+import com.afauzi.pokedex.domain.entity.PokeDetail
 import com.afauzi.pokedex.presentation.adapter.AdapterTypePoke
 import com.afauzi.pokedex.presentation.adapter.AdapterViewPagerPokeDetail
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
@@ -48,14 +49,7 @@ class PokemonDetailActivity : AppCompatActivity() {
         binding = ActivityPokemonDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Inisialisasi adapter untuk tipe pokemon
-        adapterTypePoke = AdapterTypePoke(arrayListOf())
-
-        // Inisialisasi layanan API dan repositori
-        pokeApiService = PokeApiProvider.providePokeApiService()
-        pokemonRepository = PokemonRepository(pokeApiService)
-        pokeViewModelFactory = PokeViewModelFactory(pokemonRepository, pokeApiService)
-        pokeViewModel = ViewModelProvider(this, pokeViewModelFactory)[PokeViewModel::class.java]
+        initComponentService()
 
         // Mendapatkan nama pokemon dari intent
         val pokeName = intent.getStringExtra("pokeName").toString()
@@ -63,50 +57,7 @@ class PokemonDetailActivity : AppCompatActivity() {
         // Menjalankan pemrosesan detail pokemon menggunakan viewModel dan LiveData
         lifecycleScope.launch {
             pokeViewModel.pokeDetail.observe(this@PokemonDetailActivity) {
-                val pokeId = it.id.toString()
-                val formattedId = Helpers.formatIdPoke(pokeId)
-
-                // Mengisi adapter tipe pokemon dengan data tipe
-                it.types?.let { type -> adapterTypePoke.setData(type) }
-
-                // Menampilkan informasi detail pokemon pada antarmuka
-                binding.tvIdFormat.text = formattedId
-                binding.collapsingToolbar.title = Helpers.capitalizeChar(pokeName)
-
-                Glide.with(this@PokemonDetailActivity)
-                    .load(it.sprites?.other?.home?.frontDefault)
-                    .into(binding.imgPokemonCharacter)
-
-                // Mendapatkan warna palet dari gambar dan mengatur tampilan antarmuka berdasarkan warna
-                Glide.with(this@PokemonDetailActivity)
-                    .asBitmap()
-                    .load(it.sprites?.other?.home?.frontDefault)
-                    .into(object : CustomTarget<Bitmap>() {
-                        override fun onResourceReady(
-                            resource: Bitmap,
-                            transition: Transition<in Bitmap>?
-                        ) {
-                            Palette.from(resource).generate { palette ->
-                                palette.let {
-                                    val dominantColor = palette?.getDominantColor(ContextCompat.getColor(this@PokemonDetailActivity, R.color.blue))
-
-                                    if (dominantColor != null) {
-                                        binding.appBar.setBackgroundColor(dominantColor)
-
-                                        val window: Window = window
-                                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                                        window.statusBarColor = dominantColor
-
-                                        binding.collapsingToolbar.setContentScrimColor(dominantColor)
-                                    }
-                                }
-                            }
-                        }
-
-                        override fun onLoadCleared(placeholder: Drawable?) {
-                            // Do nothing or handle placeholder
-                        }
-                    })
+                setDataToViewAsync(it, pokeName)
             }
 
             // Meminta data detail pokemon melalui viewModel
@@ -130,5 +81,46 @@ class PokemonDetailActivity : AppCompatActivity() {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = itemTabs[position]
         }.attach()
+    }
+
+    private fun setDataToViewAsync(
+        it: PokeDetail,
+        pokeName: String
+    ) {
+        val pokeId = it.id.toString()
+        val formattedId = Helpers.formatIdPoke(pokeId)
+
+        // Mengisi adapter tipe pokemon dengan data tipe
+        it.types?.let { type -> adapterTypePoke.setData(type) }
+
+        // Menampilkan informasi detail pokemon pada antarmuka
+        binding.tvIdFormat.text = formattedId
+        binding.collapsingToolbar.title = Helpers.capitalizeChar(pokeName)
+
+        Glide.with(this@PokemonDetailActivity)
+            .load(it.sprites?.other?.home?.frontDefault)
+            .into(binding.imgPokemonCharacter)
+
+        // Mendapatkan warna palet dari gambar dan mengatur tampilan antarmuka berdasarkan warna dari object Helpers
+        Helpers.objectColorPaletteImg(this, it.sprites?.other?.home?.frontDefault.toString()) { dominantColor ->
+            binding.appBar.setBackgroundColor(dominantColor)
+
+            val window: Window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = dominantColor
+
+            binding.collapsingToolbar.setContentScrimColor(dominantColor)
+        }
+    }
+
+    private fun initComponentService() {
+        // Inisialisasi adapter untuk tipe pokemon
+        adapterTypePoke = AdapterTypePoke(arrayListOf())
+
+        // Inisialisasi layanan API dan repositori
+        pokeApiService = PokeApiProvider.providePokeApiService()
+        pokemonRepository = PokemonRepository(pokeApiService)
+        pokeViewModelFactory = PokeViewModelFactory(pokemonRepository, pokeApiService)
+        pokeViewModel = ViewModelProvider(this, pokeViewModelFactory)[PokeViewModel::class.java]
     }
 }

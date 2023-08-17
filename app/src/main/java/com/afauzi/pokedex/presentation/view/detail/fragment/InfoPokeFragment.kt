@@ -15,6 +15,7 @@ import com.afauzi.pokedex.data.datasource.remote.PokeApiProvider
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
 import com.afauzi.pokedex.data.repository_implement.PokemonRepository
 import com.afauzi.pokedex.databinding.FragmentInforPokeBinding
+import com.afauzi.pokedex.domain.entity.PokeDetail
 import com.afauzi.pokedex.presentation.adapter.AdapterTypePoke
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
 import com.afauzi.pokedex.presentation.presenter.viewmodelfactory.PokeViewModelFactory
@@ -39,6 +40,45 @@ class InfoPokeFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentInforPokeBinding.inflate(layoutInflater, container, false)
 
+        initComponentService()
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val pokeName = requireActivity().intent.getStringExtra("pokeName").toString()
+
+        // Mengamati data dari ViewModel menggunakan lifecycleScope
+        lifecycleScope.launch {
+            pokeViewModel.pokeDetail.observe(requireActivity()) { pokeDetail ->
+                setDataToViewAsync(pokeDetail)
+            }
+
+            // Memanggil fungsi untuk mendapatkan detail Pokemon
+            pokeViewModel.getPokeDetail(pokeName)
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setDataToViewAsync(pokeDetail: PokeDetail) {
+        // Mengatur teks untuk TextView
+        binding.includedViewName.tvText.text = "Name"
+        binding.includedViewHeight.tvText.text = "Height"
+        binding.includedViewWeight.tvText.text = "Weight"
+
+        // Menghitung tinggi dan berat dalam unit yang sesuai
+        val height = pokeDetail.height?.div(100.0)
+        val weight = pokeDetail.weight?.div(10.0)
+
+        // Mengisi TextViews dengan nilai dari Pokemon detail
+        binding.includedViewName.tvNamePoke.text = pokeDetail.name
+        binding.includedViewHeight.tvNamePoke.text = "$height m"
+        binding.includedViewWeight.tvNamePoke.text = "$weight kgs"
+    }
+
+    private fun initComponentService() {
         // Menginisialisasi layanan dan repository
         pokeApiService = PokeApiProvider.providePokeApiService()
         pokemonRepository = PokemonRepository(pokeApiService)
@@ -48,35 +88,5 @@ class InfoPokeFragment : Fragment() {
 
         // Membuat instance ViewModel menggunakan ViewModelProvider
         pokeViewModel = ViewModelProvider(this, pokeViewModelFactory)[PokeViewModel::class.java]
-
-        return binding.root
-    }
-
-    @SuppressLint("SetTextI18n")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val pokeName = requireActivity().intent.getStringExtra("pokeName").toString()
-
-        // Mengamati data dari ViewModel menggunakan lifecycleScope
-        lifecycleScope.launch {
-            pokeViewModel.pokeDetail.observe(requireActivity()) { pokeDetail ->
-                // Mengatur teks untuk TextView
-                binding.includedViewName.tvText.text = "Name"
-                binding.includedViewHeight.tvText.text = "Height"
-                binding.includedViewWeight.tvText.text = "Weight"
-
-                // Menghitung tinggi dan berat dalam unit yang sesuai
-                val height = pokeDetail.height?.div(100.0)
-                val weight = pokeDetail.weight?.div(10.0)
-
-                // Mengisi TextViews dengan nilai dari Pokemon detail
-                binding.includedViewName.tvNamePoke.text = pokeDetail.name
-                binding.includedViewHeight.tvNamePoke.text = "$height m"
-                binding.includedViewWeight.tvNamePoke.text = "$weight kgs"
-            }
-
-            // Memanggil fungsi untuk mendapatkan detail Pokemon
-            pokeViewModel.getPokeDetail(pokeName)
-        }
     }
 }
