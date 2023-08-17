@@ -7,4 +7,5 @@
     <dimen name="text_size_title_name_Detail">32dp</dimen>
     <dimen name="card_corner">16dp</dimen>
     <dimen name="margin_root">16dp</dimen>
+    <dimen name="card_radius">16dp</dimen>
 </resources>
