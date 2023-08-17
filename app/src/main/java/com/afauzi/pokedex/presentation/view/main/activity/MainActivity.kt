@@ -1,7 +1,12 @@
 package com.afauzi.pokedex.presentation.view.main.activity
 
+import android.animation.ObjectAnimator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.animation.AnticipateInterpolator
+import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
@@ -20,6 +25,9 @@ class MainActivity : AppCompatActivity() {
      * Dipanggil saat aktivitas dibuat. Menginisialisasi antarmuka pengguna dan mengatur navigasi.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Handle the splash screen transition.
+        val splashScreen = installSplashScreen()
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -31,7 +39,8 @@ class MainActivity : AppCompatActivity() {
      */
     private fun setUpNavigation() {
         // Temukan NavHostFragment dan dapatkan NavController
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
         navController = navHostFragment.navController
 
         // Mengatur navigasi bawah dengan NavController
