@@ -1,5 +1,6 @@
 package com.afauzi.pokedex.presentation.view.main.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -121,14 +122,29 @@ class ComparePokemon : Fragment(), AdapterSearchPokePaging.ListenerPokeAdapter {
         Glide.with(requireActivity())
             .load(dataImageOnListByIndex)
             .into(setView.itemImgPoke)
+
+        Helpers.objectColorPaletteImg(requireActivity(), dataImageOnListByIndex) {
+            setView.llBgCard.setBackgroundColor(it)
+        }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setDataToViewAsync(pokeDetail: PokeDetail, dataCompareView: ItemComparisonPokeBinding) {
         dataCompareView.tvNamePokemon.text = pokeDetail.name
         Glide.with(requireActivity())
             .load(pokeDetail.sprites?.other?.home?.frontDefault)
             .into(dataCompareView.ivPokemon)
         dataCompareView.tvCodePokemon.text = Helpers.formatIdPoke(pokeDetail.id.toString())
+        Helpers.objectColorPaletteImg(requireActivity(), pokeDetail.sprites?.other?.home?.frontDefault.toString()) {
+            dataCompareView.bgDataCompare.setBackgroundColor(it)
+        }
+
+        // Menghitung tinggi dan berat dalam unit yang sesuai
+        val height = pokeDetail.height?.div(100.0)
+        val weight = pokeDetail.weight?.div(10.0)
+
+        dataCompareView.tvDataHeightPoke.text = "$height m"
+        dataCompareView.tvDataWeightPoke.text = "$weight kgs"
     }
 
     private fun fetchPokemonData() {

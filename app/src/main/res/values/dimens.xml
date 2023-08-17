@@ -8,4 +8,5 @@
     <dimen name="card_corner">16dp</dimen>
     <dimen name="margin_root">16dp</dimen>
     <dimen name="card_radius">16dp</dimen>
+    <dimen name="text_size_standard">12sp</dimen>
 </resources>

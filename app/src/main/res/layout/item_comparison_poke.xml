@@ -15,6 +15,7 @@
 
 
         <LinearLayout
+            android:id="@+id/bg_data_compare"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/blue"
@@ -50,40 +51,32 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_root"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_size_title_name"
+                android:textSize="@dimen/text_size_standard"
                 tools:text="#0001" />
 
-            <androidx.cardview.widget.CardView
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_root"
-                app:cardCornerRadius="@dimen/card_radius">
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_root">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_type_poke"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#B977BEFE"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="@dimen/padding_root">
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="2"
+                    tools:listitem="@layout/item_type_poke" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_type_poke"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:itemCount="2"
-                        tools:listitem="@layout/item_type_poke" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="Type" />
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Type"
+                    android:textSize="@dimen/text_size_standard"/>
+            </LinearLayout>
 
             <GridLayout
                 android:layout_width="match_parent"
@@ -99,79 +92,55 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <!-- CardView 1 -->
-                    <androidx.cardview.widget.CardView
+                    <!-- Konten CardView 1 -->
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        app:cardElevation="4dp"
-                        app:cardCornerRadius="8dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="8dp">
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_gravity="center">
 
-                        <!-- Konten CardView 1 -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:padding="16dp"
-                            android:gravity="center"
-                            android:background="#B977BEFE">
+                        <TextView
+                            android:id="@+id/tv_data_height_poke"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="0.7 m"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"/>
 
-                           <TextView
-                               android:id="@+id/tv_data_height_poke"
-                               android:layout_width="wrap_content"
-                               android:layout_height="wrap_content"
-                               tools:text="0.7 m"
-                               android:textStyle="bold"
-                               android:textColor="@color/black"
-                               android:textSize="24sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Height"
+                            android:textSize="@dimen/text_size_standard"/>
 
-                            <TextView
-                               android:layout_width="wrap_content"
-                               android:layout_height="wrap_content"
-                               tools:text="Height"/>
+                    </LinearLayout>
 
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- CardView 2 -->
-                    <androidx.cardview.widget.CardView
+                    <!-- Konten CardView 2 -->
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        app:cardElevation="4dp"
-                        app:cardCornerRadius="8dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="8dp">
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_gravity="center">
 
-                        <!-- Konten CardView 2 -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:padding="16dp"
-                            android:gravity="center"
-                            android:background="#B977BEFE">
+                        <TextView
+                            android:id="@+id/tv_data_weight_poke"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="6.9 kg"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"/>
 
-                            <TextView
-                                android:id="@+id/tv_data_weight_poke"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="6.9 kg"
-                                android:textStyle="bold"
-                                android:textColor="@color/black"
-                                android:textSize="24sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Weight"
+                            android:textSize="@dimen/text_size_standard"/>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="Weight"/>
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
+                    </LinearLayout>
 
                 </LinearLayout>
 
