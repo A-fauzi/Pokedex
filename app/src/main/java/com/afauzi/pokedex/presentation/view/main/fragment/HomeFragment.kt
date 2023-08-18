@@ -89,9 +89,10 @@ class HomeFragment : Fragment() {
         pokemonRepository = PokemonRepository(pokeApiService)
         pokeViewModelFactory = PokeViewModelFactory(pokemonRepository, pokeApiService)
         pokeViewModel = ViewModelProvider(this, pokeViewModelFactory)[PokeViewModel::class.java]
-        adapterPokePaging = AdapterPokePaging(requireActivity(), R.layout.item_poke_layout) { view, pokemon ->
-            bindDataToView(view, pokemon)
-        }
+        adapterPokePaging =
+            AdapterPokePaging(requireActivity(), R.layout.item_poke_layout) { view, pokemon ->
+                bindDataToView(view, pokemon)
+            }
     }
 
 
@@ -105,40 +106,17 @@ class HomeFragment : Fragment() {
         val containerView = view.findViewById<LinearLayout>(R.id.ll_bg_card)
         val cardItem = view.findViewById<CardView>(R.id.card_item)
 
+        val imgPokemon = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokeId}.png"
+
         characterName.text = Helpers.capitalizeChar(name.toString())
+
         Glide.with(requireActivity())
-            .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokeId}.png")
+            .load(imgPokemon)
             .into(itemImgPoke)
 
-        // Palette Color
-        Glide.with(requireActivity())
-            .asBitmap()
-            .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokeId}.png")
-            .into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(
-                    resource: Bitmap,
-                    transition: Transition<in Bitmap>?
-                ) {
-                    Palette.from(resource).generate { palette ->
-                        palette?.let {
-                            // Mendapatkan warna yang Anda inginkan dari objek Palette, misalnya warna dominan
-                            val dominantColor = palette.getDominantColor(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    R.color.blue
-                                )
-                            )
-
-                            // Gunakan warna yang diambil untuk mengatur tampilan UI Anda
-                            containerView.setBackgroundColor(dominantColor)
-                        }
-                    }
-                }
-
-                override fun onLoadCleared(placeholder: Drawable?) {
-                    // Do nothing or handle placeholder
-                }
-            })
+        Helpers.objectColorPaletteImg(requireActivity(), imgPokemon) { dominantColor: Int ->
+            containerView.setBackgroundColor(dominantColor)
+        }
 
         cardItem.setOnClickListener {
             val intent = Intent(requireActivity(), PokemonDetailActivity::class.java)
