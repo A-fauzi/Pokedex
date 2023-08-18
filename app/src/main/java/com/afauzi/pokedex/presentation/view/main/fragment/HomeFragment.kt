@@ -77,12 +77,12 @@ class HomeFragment : Fragment(), AdapterPokePaging.ListenerPokeAdapter {
     }
 
     override fun onResultDataListener(name: String) {
-        lifecycleScope.launch {
-            pokeViewModel.pokeDetail.observe(viewLifecycleOwner) {
-                it.types?.let { it1 -> adapterPokePaging.setDataItemsType(it1) }
-            }
-            pokeViewModel.getPokeDetail(name)
-        }
+//        lifecycleScope.launch {
+//            pokeViewModel.pokeDetail.observe(viewLifecycleOwner) {
+//                it.types?.let { it1 -> adapterPokePaging.setDataItemsType(it1) }
+//            }
+//            pokeViewModel.getPokeDetail(name)
+//        }
     }
 
     private fun initComponentService() {

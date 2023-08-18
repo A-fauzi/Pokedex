@@ -32,7 +32,6 @@ class AdapterPokePaging(
     private val listenerPokeAdapter: ListenerPokeAdapter
 ) : PagingDataAdapter<Pokemon, AdapterPokePaging.ViewHolder>(PokeDiffComp) {
 
-    private lateinit var adapterTypePoke: AdapterTypePoke
 
     // Objek yang mengimplementasikan DiffUtil.ItemCallback untuk membandingkan item.
     object PokeDiffComp : DiffUtil.ItemCallback<Pokemon>() {
@@ -91,13 +90,6 @@ class AdapterPokePaging(
                 }
 
                 listenerPokeAdapter.onResultDataListener(name ?: "")
-
-
-                adapterTypePoke = AdapterTypePoke(arrayListOf())
-                binding.rvTypePoke.apply {
-                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                    adapter = adapterTypePoke
-                }
             }
         }
     }
@@ -112,9 +104,5 @@ class AdapterPokePaging(
     interface ListenerPokeAdapter {
         fun onClickListenerAdapter(name: String)
         fun onResultDataListener(name: String)
-    }
-
-    fun setDataItemsType(data: List<TypesItem?>) {
-        adapterTypePoke.setData(data)
     }
 }

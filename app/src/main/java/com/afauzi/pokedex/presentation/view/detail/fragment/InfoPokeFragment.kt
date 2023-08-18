@@ -2,21 +2,17 @@ package com.afauzi.pokedex.presentation.view.detail.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.afauzi.pokedex.R
 import com.afauzi.pokedex.data.datasource.remote.PokeApiProvider
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
 import com.afauzi.pokedex.data.repository_implement.PokemonRepository
 import com.afauzi.pokedex.databinding.FragmentInforPokeBinding
 import com.afauzi.pokedex.domain.entity.PokeDetail
-import com.afauzi.pokedex.presentation.adapter.AdapterTypePoke
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
 import com.afauzi.pokedex.presentation.presenter.viewmodelfactory.PokeViewModelFactory
 import kotlinx.coroutines.launch

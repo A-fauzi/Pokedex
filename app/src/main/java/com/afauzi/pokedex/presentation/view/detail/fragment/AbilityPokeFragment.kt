@@ -1,12 +1,11 @@
 package com.afauzi.pokedex.presentation.view.detail.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -16,20 +15,18 @@ import com.afauzi.pokedex.data.datasource.remote.PokeApiProvider
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
 import com.afauzi.pokedex.data.repository_implement.PokemonRepository
 import com.afauzi.pokedex.databinding.FragmentAbilityPokeBinding
+import com.afauzi.pokedex.domain.entity.AbilitiesItem
 import com.afauzi.pokedex.domain.entity.PokeAbility
-import com.afauzi.pokedex.presentation.adapter.AdapterAbilitiesPoke
-import com.afauzi.pokedex.presentation.adapter.AdapterTypePoke
+import com.afauzi.pokedex.presentation.adapter.AdapterChip
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
 import com.afauzi.pokedex.presentation.presenter.viewmodelfactory.PokeViewModelFactory
-import com.afauzi.pokedex.utils.Helpers
-import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 
 
 /**
  * Fragment untuk menampilkan informasi tentang kemampuan Pokemon.
  */
-class AbilityPokeFragment : Fragment(), AdapterAbilitiesPoke.AdapterAbilityListener {
+class AbilityPokeFragment : Fragment() {
 
     private lateinit var binding: FragmentAbilityPokeBinding
 
@@ -38,7 +35,8 @@ class AbilityPokeFragment : Fragment(), AdapterAbilitiesPoke.AdapterAbilityListe
     private lateinit var pokeViewModelFactory: PokeViewModelFactory
     private lateinit var pokeApiService: PokeApiService
     private lateinit var pokemonRepository: PokemonRepository
-    private lateinit var adapterAbilitiesPoke: AdapterAbilitiesPoke
+    private lateinit var adapterChip: AdapterChip<AbilitiesItem>
+    private val dataListAbilities: ArrayList<AbilitiesItem> = arrayListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,7 +59,7 @@ class AbilityPokeFragment : Fragment(), AdapterAbilitiesPoke.AdapterAbilityListe
         lifecycleScope.launch {
             pokeViewModel.pokeDetail.observe(requireActivity()) { pokeDetail ->
                 // Menggunakan adapter untuk mengisi daftar kemampuan Pokemon
-                pokeDetail.abilities?.let { abilities -> adapterAbilitiesPoke.setData(abilities) }
+                pokeDetail.abilities?.let { abilities -> adapterChip.setData(abilities as List<AbilitiesItem>) }
             }
 
             // Memanggil fungsi untuk mendapatkan detail Pokemon
@@ -70,26 +68,28 @@ class AbilityPokeFragment : Fragment(), AdapterAbilitiesPoke.AdapterAbilityListe
 
         // Mengatur RecyclerView dan adapter untuk daftar kemampuan Pokemon
         binding.rvAbilitiesPoke.apply {
-            layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = adapterAbilitiesPoke
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = adapterChip
         }
     }
 
     // Implementasi dari AdapterAbilitiesPoke.AdapterAbilityListener
-    override fun onclickListenerAbility(name: String) {
-        lifecycleScope.launch {
-            pokeViewModel.pokeAbility.observe(requireActivity()) { pokeAbility ->
-                setDataToViewAsync(pokeAbility)
-            }
-
-            // Memanggil fungsi untuk mendapatkan informasi kemampuan Pokemon
-            pokeViewModel.getPokeAbility(name)
-        }
-    }
+//    override fun onclickListenerAbility(name: String) {
+//        lifecycleScope.launch {
+//            pokeViewModel.pokeAbility.observe(requireActivity()) { pokeAbility ->
+//                setDataToViewAsync(pokeAbility)
+//            }
+//
+//            // Memanggil fungsi untuk mendapatkan informasi kemampuan Pokemon
+//            pokeViewModel.getPokeAbility(name)
+//        }
+//    }
 
     private fun setDataToViewAsync(pokeAbility: PokeAbility) {
         // Mengambil dan menampilkan deskripsi kemampuan
-        val sortedEntries = pokeAbility.effectEntries?.filter { effect -> effect?.language?.name == "en" }
+        val sortedEntries =
+            pokeAbility.effectEntries?.filter { effect -> effect?.language?.name == "en" }
 
         sortedEntries?.forEach { effectEntries ->
             binding.tvAbilityDesc.text = effectEntries?.effect.toString()
@@ -111,7 +111,11 @@ class AbilityPokeFragment : Fragment(), AdapterAbilitiesPoke.AdapterAbilityListe
 
     private fun initComponentService() {
         // Membuat instance adapter untuk kemampuan Pokemon
-        adapterAbilitiesPoke = AdapterAbilitiesPoke(this, arrayListOf())
+        adapterChip =
+            AdapterChip(dataListAbilities, R.layout.item_ability_poke) { view, abilitiesItem ->
+                val textAbilities: TextView = view.findViewById(R.id.item_ability_poke)
+                textAbilities.text = abilitiesItem.ability?.name
+            }
 
         // Menginisialisasi layanan dan repository
         pokeApiService = PokeApiProvider.providePokeApiService()

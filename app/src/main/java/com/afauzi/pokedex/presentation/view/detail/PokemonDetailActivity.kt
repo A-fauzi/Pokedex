@@ -1,7 +1,6 @@
 package com.afauzi.pokedex.presentation.view.detail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Window
 import android.view.WindowManager
 import android.widget.TextView
@@ -17,7 +16,6 @@ import com.afauzi.pokedex.databinding.ActivityPokemonDetailBinding
 import com.afauzi.pokedex.domain.entity.PokeDetail
 import com.afauzi.pokedex.domain.entity.TypesItem
 import com.afauzi.pokedex.presentation.adapter.AdapterChip
-import com.afauzi.pokedex.presentation.adapter.AdapterTypePoke
 import com.afauzi.pokedex.presentation.adapter.AdapterViewPagerPokeDetail
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
 import com.afauzi.pokedex.presentation.presenter.viewmodelfactory.PokeViewModelFactory
