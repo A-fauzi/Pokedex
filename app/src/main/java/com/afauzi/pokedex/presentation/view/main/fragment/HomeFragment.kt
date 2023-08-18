@@ -16,6 +16,8 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
+import androidx.paging.LoadStateAdapter
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.GridLayoutManager
 import com.afauzi.pokedex.R
@@ -25,6 +27,7 @@ import com.afauzi.pokedex.data.repository_implement.PokemonRepository
 import com.afauzi.pokedex.databinding.FragmentHomeBinding
 import com.afauzi.pokedex.domain.entity.Pokemon
 import com.afauzi.pokedex.presentation.adapter.AdapterPokePaging
+import com.afauzi.pokedex.presentation.adapter.loadstateadapter.LoadStateAdapterPokemon
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
 import com.afauzi.pokedex.presentation.presenter.viewmodelfactory.PokeViewModelFactory
 import com.afauzi.pokedex.presentation.view.detail.PokemonDetailActivity
@@ -79,7 +82,21 @@ class HomeFragment : Fragment() {
     private fun setUpRecyclerView() {
         binding.rvPokemon.apply {
             layoutManager = GridLayoutManager(requireActivity(), 2)
-            adapter = adapterPokePaging
+            adapter = adapterPokePaging.withLoadStateHeaderAndFooter(
+                header = LoadStateAdapterPokemon {adapterPokePaging.retry()},
+                footer = LoadStateAdapterPokemon {adapterPokePaging.retry()}
+            )
+        }
+
+        adapterPokePaging.addLoadStateListener { loadState ->
+            val isLoading = loadState.refresh is LoadState.Loading
+
+            if (isLoading) {
+                binding.rvPokemon.visibility = View.GONE
+            } else {
+                binding.rvPokemon.visibility = View.VISIBLE
+                binding.includedProgressView.progressIndicator.visibility = View.GONE
+            }
         }
     }
 

@@ -3,6 +3,7 @@ package com.afauzi.pokedex.data.datasource.remote
 import com.afauzi.pokedex.domain.entity.PokeAbility
 import com.afauzi.pokedex.domain.entity.PokeDetail
 import com.afauzi.pokedex.domain.entity.PokemonList
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

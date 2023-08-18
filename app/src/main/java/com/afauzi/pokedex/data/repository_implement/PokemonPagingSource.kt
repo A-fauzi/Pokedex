@@ -4,6 +4,10 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
 import com.afauzi.pokedex.domain.entity.Pokemon
+import com.afauzi.pokedex.domain.entity.PokemonList
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class PokemonPagingSource(private val pokeApiService: PokeApiService) :
     PagingSource<Int, Pokemon>() {
@@ -28,29 +32,27 @@ class PokemonPagingSource(private val pokeApiService: PokeApiService) :
      */
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Pokemon> {
         return try {
+            val responseData = mutableListOf<Pokemon>()
+
             // Mendapatkan nomor halaman yang akan dimuat.
             val currentLoadingPageKey = params.key ?: 0
 
             // Mengirim permintaan HTTP untuk mengambil daftar Pokemon dengan offset yang sesuai.
             val response = pokeApiService.getPokemonList(offset = currentLoadingPageKey)
 
-            // Menampung data Pokemon dalam daftar responseData.
-            val responseData = mutableListOf<Pokemon>()
-            val data = response.body()?.results
-            data?.let {
-                responseData.addAll(it)
+            if (response.isSuccessful) {
+                val data = response.body()?.results ?: emptyList()
+                responseData.addAll(data)
+
+                // Menghitung key halaman sebelumnya dan key halaman berikutnya.
+                val prevKey = if (currentLoadingPageKey > 0) currentLoadingPageKey - 25 else null
+                val nextKey = if (responseData.isNotEmpty()) currentLoadingPageKey + 25 else null
+
+                // Mengembalikan LoadResult.Page dengan data halaman, key halaman sebelumnya, dan key halaman berikutnya.
+                LoadResult.Page(data = responseData, prevKey = prevKey, nextKey = nextKey)
+            } else {
+                LoadResult.Error(Exception("API Request Failed"))
             }
-
-            // Menghitung key halaman sebelumnya dan key halaman berikutnya.
-            val prevKey = if (currentLoadingPageKey > 0) currentLoadingPageKey - 25 else null
-            val nextKey = if (responseData.isNotEmpty()) currentLoadingPageKey + 25 else null
-
-            // Mengembalikan LoadResult.Page dengan data halaman, key halaman sebelumnya, dan key halaman berikutnya.
-            LoadResult.Page(
-                data = responseData,
-                prevKey = prevKey,
-                nextKey = nextKey
-            )
         } catch (e: Exception) {
             // Jika terjadi kesalahan, mengembalikan LoadResult.Error dengan Exception.
             LoadResult.Error(e)
