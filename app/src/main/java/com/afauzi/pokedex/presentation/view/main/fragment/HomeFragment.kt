@@ -1,29 +1,43 @@
 package com.afauzi.pokedex.presentation.view.main.fragment
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.GridLayoutManager
+import com.afauzi.pokedex.R
 import com.afauzi.pokedex.data.datasource.remote.PokeApiProvider
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
 import com.afauzi.pokedex.data.repository_implement.PokemonRepository
 import com.afauzi.pokedex.databinding.FragmentHomeBinding
+import com.afauzi.pokedex.domain.entity.Pokemon
 import com.afauzi.pokedex.presentation.adapter.AdapterPokePaging
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
 import com.afauzi.pokedex.presentation.presenter.viewmodelfactory.PokeViewModelFactory
 import com.afauzi.pokedex.presentation.view.detail.PokemonDetailActivity
+import com.afauzi.pokedex.utils.Helpers
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import kotlinx.coroutines.launch
 
 /**
  * Fragment untuk menampilkan daftar Pokemon di tampilan beranda.
  */
-class HomeFragment : Fragment(), AdapterPokePaging.ListenerPokeAdapter {
+class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapterPokePaging: AdapterPokePaging
@@ -69,29 +83,68 @@ class HomeFragment : Fragment(), AdapterPokePaging.ListenerPokeAdapter {
         }
     }
 
-    // Implementasi dari ListenerPokeAdapter untuk menghandle klik pada item Pokemon
-    override fun onClickListenerAdapter(name: String) {
-        val intent = Intent(requireActivity(), PokemonDetailActivity::class.java)
-        intent.putExtra("pokeName", name)
-        startActivity(intent)
-    }
-
-    override fun onResultDataListener(name: String) {
-//        lifecycleScope.launch {
-//            pokeViewModel.pokeDetail.observe(viewLifecycleOwner) {
-//                it.types?.let { it1 -> adapterPokePaging.setDataItemsType(it1) }
-//            }
-//            pokeViewModel.getPokeDetail(name)
-//        }
-    }
-
     private fun initComponentService() {
         // Menginisialisasi layanan, repository, adapter, dan ViewModel
         pokeApiService = PokeApiProvider.providePokeApiService()
         pokemonRepository = PokemonRepository(pokeApiService)
-        adapterPokePaging = AdapterPokePaging(requireActivity(), this)
         pokeViewModelFactory = PokeViewModelFactory(pokemonRepository, pokeApiService)
         pokeViewModel = ViewModelProvider(this, pokeViewModelFactory)[PokeViewModel::class.java]
+        adapterPokePaging = AdapterPokePaging(requireActivity(), R.layout.item_poke_layout) { view, pokemon ->
+            bindDataToView(view, pokemon)
+        }
     }
-}
 
+
+    private fun bindDataToView(view: View, pokemon: Pokemon) {
+        val parts = pokemon.url?.split("/")
+        val name = pokemon.name
+        val pokeId = parts?.get(parts.size - 2).toString()
+
+        val characterName = view.findViewById<TextView>(R.id.character_name)
+        val itemImgPoke = view.findViewById<ImageView>(R.id.item_img_poke)
+        val containerView = view.findViewById<LinearLayout>(R.id.ll_bg_card)
+        val cardItem = view.findViewById<CardView>(R.id.card_item)
+
+        characterName.text = Helpers.capitalizeChar(name.toString())
+        Glide.with(requireActivity())
+            .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokeId}.png")
+            .into(itemImgPoke)
+
+        // Palette Color
+        Glide.with(requireActivity())
+            .asBitmap()
+            .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokeId}.png")
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    transition: Transition<in Bitmap>?
+                ) {
+                    Palette.from(resource).generate { palette ->
+                        palette?.let {
+                            // Mendapatkan warna yang Anda inginkan dari objek Palette, misalnya warna dominan
+                            val dominantColor = palette.getDominantColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.blue
+                                )
+                            )
+
+                            // Gunakan warna yang diambil untuk mengatur tampilan UI Anda
+                            containerView.setBackgroundColor(dominantColor)
+                        }
+                    }
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    // Do nothing or handle placeholder
+                }
+            })
+
+        cardItem.setOnClickListener {
+            val intent = Intent(requireActivity(), PokemonDetailActivity::class.java)
+            intent.putExtra("pokeName", pokemon.name)
+            startActivity(intent)
+        }
+    }
+
+}
