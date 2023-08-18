@@ -3,11 +3,17 @@ package com.afauzi.pokedex.presentation.view.main.fragment
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afauzi.pokedex.R
 import com.afauzi.pokedex.data.datasource.remote.PokeApiProvider
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
 import com.afauzi.pokedex.data.repository_implement.PokemonRepository
@@ -15,17 +21,18 @@ import com.afauzi.pokedex.databinding.FragmentComparePokemonBinding
 import com.afauzi.pokedex.databinding.ItemComparisonPokeBinding
 import com.afauzi.pokedex.databinding.ItemPokeLayoutBinding
 import com.afauzi.pokedex.domain.entity.PokeDetail
-import com.afauzi.pokedex.presentation.adapter.AdapterSearchPokePaging
+import com.afauzi.pokedex.domain.entity.Pokemon
+import com.afauzi.pokedex.presentation.adapter.AdapterPokePaging
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
 import com.afauzi.pokedex.presentation.presenter.viewmodelfactory.PokeViewModelFactory
 import com.afauzi.pokedex.utils.Helpers
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 
-class ComparePokemon : Fragment(), AdapterSearchPokePaging.ListenerPokeAdapter {
+class ComparePokemon : Fragment() {
 
     private lateinit var binding: FragmentComparePokemonBinding
-    private lateinit var adapterSearchPokePaging: AdapterSearchPokePaging
+    private lateinit var adapterPokePaging: AdapterPokePaging
     private lateinit var pokeViewModel: PokeViewModel
     private lateinit var pokeViewModelFactory: PokeViewModelFactory
     private lateinit var pokeApiService: PokeApiService
@@ -59,7 +66,7 @@ class ComparePokemon : Fragment(), AdapterSearchPokePaging.ListenerPokeAdapter {
     private fun setUpViewModel() {
         lifecycleScope.launch {
             pokeViewModel.listDataPoke.collect { pagerData ->
-                adapterSearchPokePaging.submitData(pagerData)
+                adapterPokePaging.submitData(pagerData)
             }
         }
     }
@@ -67,11 +74,11 @@ class ComparePokemon : Fragment(), AdapterSearchPokePaging.ListenerPokeAdapter {
     private fun setUpRecyclerView() {
         binding.rvPokemonLis.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = adapterSearchPokePaging
+            adapter = adapterPokePaging
         }
     }
 
-    override fun onClickListenerAdapter(name: String, image: String) {
+    private fun getDataCompareOnClick(name: String, image: String) {
         if (listName.size < maxListSize) {
             listName.add(name)
             listImage.add(image)
@@ -129,13 +136,19 @@ class ComparePokemon : Fragment(), AdapterSearchPokePaging.ListenerPokeAdapter {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setDataToViewAsync(pokeDetail: PokeDetail, dataCompareView: ItemComparisonPokeBinding) {
+    private fun setDataToViewAsync(
+        pokeDetail: PokeDetail,
+        dataCompareView: ItemComparisonPokeBinding
+    ) {
         dataCompareView.tvNamePokemon.text = pokeDetail.name?.capitalize()
         Glide.with(requireActivity())
             .load(pokeDetail.sprites?.other?.home?.frontDefault)
             .into(dataCompareView.ivPokemon)
         dataCompareView.tvCodePokemon.text = Helpers.formatIdPoke(pokeDetail.id.toString())
-        Helpers.objectColorPaletteImg(requireActivity(), pokeDetail.sprites?.other?.home?.frontDefault.toString()) {
+        Helpers.objectColorPaletteImg(
+            requireActivity(),
+            pokeDetail.sprites?.other?.home?.frontDefault.toString()
+        ) {
             dataCompareView.bgDataCompare.setBackgroundColor(it)
         }
 
@@ -158,9 +171,44 @@ class ComparePokemon : Fragment(), AdapterSearchPokePaging.ListenerPokeAdapter {
     private fun initComponentService() {
         pokeApiService = PokeApiProvider.providePokeApiService()
         pokemonRepository = PokemonRepository(pokeApiService)
-        adapterSearchPokePaging = AdapterSearchPokePaging(requireActivity(), this)
+        adapterPokePaging =
+            AdapterPokePaging(requireActivity(), R.layout.item_search_poke) { view, pokemon ->
+                bindDataListToView(view, pokemon)
+            }
         pokeViewModelFactory = PokeViewModelFactory(pokemonRepository, pokeApiService)
         pokeViewModel = ViewModelProvider(this, pokeViewModelFactory)[PokeViewModel::class.java]
         recyclerView = binding.rvPokemonLis
     }
+
+
+    private fun bindDataListToView(view: View, pokemon: Pokemon) {
+        val parts = pokemon.url?.split("/")
+        val name = pokemon.name
+        val pokeId = parts?.get(parts.size - 2).toString()
+
+        val characterName = view.findViewById<TextView>(R.id.poke_name)
+        val itemImgPoke = view.findViewById<ImageView>(R.id.poke_image)
+        val containerView = view.findViewById<LinearLayout>(R.id.container_list_poke_search)
+        val cardItem = view.findViewById<CardView>(R.id.card_item_list_poke_search)
+
+        val imgPokemon =
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokeId}.png"
+
+        characterName.text = Helpers.capitalizeChar(name.toString())
+
+        Glide.with(requireActivity())
+            .load(imgPokemon)
+            .into(itemImgPoke)
+
+        Helpers.objectColorPaletteImg(requireActivity(), imgPokemon) { dominantColor: Int ->
+            containerView.setBackgroundColor(dominantColor)
+        }
+
+        cardItem.setOnClickListener {
+            if (name != null) {
+                getDataCompareOnClick(name, imgPokemon)
+            }
+        }
+    }
+
 }

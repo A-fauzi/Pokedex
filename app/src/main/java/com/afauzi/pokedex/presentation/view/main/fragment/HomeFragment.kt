@@ -89,10 +89,9 @@ class HomeFragment : Fragment() {
         pokemonRepository = PokemonRepository(pokeApiService)
         pokeViewModelFactory = PokeViewModelFactory(pokemonRepository, pokeApiService)
         pokeViewModel = ViewModelProvider(this, pokeViewModelFactory)[PokeViewModel::class.java]
-        adapterPokePaging =
-            AdapterPokePaging(requireActivity(), R.layout.item_poke_layout) { view, pokemon ->
+        adapterPokePaging = AdapterPokePaging(requireActivity(), R.layout.item_poke_layout) { view, pokemon ->
                 bindDataToView(view, pokemon)
-            }
+        }
     }
 
 
