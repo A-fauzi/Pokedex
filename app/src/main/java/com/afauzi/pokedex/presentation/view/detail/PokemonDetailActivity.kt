@@ -1,17 +1,13 @@
 package com.afauzi.pokedex.presentation.view.detail
 
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Window
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afauzi.pokedex.R
 import com.afauzi.pokedex.data.datasource.remote.PokeApiProvider
@@ -19,14 +15,14 @@ import com.afauzi.pokedex.data.datasource.remote.PokeApiService
 import com.afauzi.pokedex.data.repository_implement.PokemonRepository
 import com.afauzi.pokedex.databinding.ActivityPokemonDetailBinding
 import com.afauzi.pokedex.domain.entity.PokeDetail
+import com.afauzi.pokedex.domain.entity.TypesItem
+import com.afauzi.pokedex.presentation.adapter.AdapterChip
 import com.afauzi.pokedex.presentation.adapter.AdapterTypePoke
 import com.afauzi.pokedex.presentation.adapter.AdapterViewPagerPokeDetail
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
 import com.afauzi.pokedex.presentation.presenter.viewmodelfactory.PokeViewModelFactory
 import com.afauzi.pokedex.utils.Helpers
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 
@@ -40,7 +36,8 @@ class PokemonDetailActivity : AppCompatActivity() {
     private lateinit var pokeViewModelFactory: PokeViewModelFactory
     private lateinit var pokeApiService: PokeApiService
     private lateinit var pokemonRepository: PokemonRepository
-    private lateinit var adapterTypePoke: AdapterTypePoke
+    private lateinit var adapterChip: AdapterChip<TypesItem>
+    private val dataListType: ArrayList<TypesItem> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,8 +63,12 @@ class PokemonDetailActivity : AppCompatActivity() {
 
         // Menampilkan tipe-tipe pokemon pada recyclerView
         binding.rvTypePoke.apply {
-            layoutManager = LinearLayoutManager(this@PokemonDetailActivity, LinearLayoutManager.HORIZONTAL, false)
-            adapter = adapterTypePoke
+            layoutManager = LinearLayoutManager(
+                this@PokemonDetailActivity,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            adapter = adapterChip
         }
 
         // Konfigurasi ViewPager dan TabLayout untuk menampilkan tampilan fragment yang berbeda
@@ -81,6 +82,7 @@ class PokemonDetailActivity : AppCompatActivity() {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = itemTabs[position]
         }.attach()
+
     }
 
     private fun setDataToViewAsync(
@@ -91,7 +93,7 @@ class PokemonDetailActivity : AppCompatActivity() {
         val formattedId = Helpers.formatIdPoke(pokeId)
 
         // Mengisi adapter tipe pokemon dengan data tipe
-        it.types?.let { type -> adapterTypePoke.setData(type) }
+        adapterChip.setData(it.types as List<TypesItem>)
 
         // Menampilkan informasi detail pokemon pada antarmuka
         binding.tvIdFormat.text = formattedId
@@ -102,7 +104,10 @@ class PokemonDetailActivity : AppCompatActivity() {
             .into(binding.imgPokemonCharacter)
 
         // Mendapatkan warna palet dari gambar dan mengatur tampilan antarmuka berdasarkan warna dari object Helpers
-        Helpers.objectColorPaletteImg(this, it.sprites?.other?.home?.frontDefault.toString()) { dominantColor ->
+        Helpers.objectColorPaletteImg(
+            this,
+            it.sprites?.other?.home?.frontDefault.toString()
+        ) { dominantColor ->
             binding.appBar.setBackgroundColor(dominantColor)
 
             val window: Window = window
@@ -114,10 +119,11 @@ class PokemonDetailActivity : AppCompatActivity() {
     }
 
     private fun initComponentService() {
-        // Inisialisasi adapter untuk tipe pokemon
-        adapterTypePoke = AdapterTypePoke(arrayListOf())
-
         // Inisialisasi layanan API dan repositori
+        adapterChip = AdapterChip(dataListType, R.layout.item_type_poke) { view, typesItem ->
+            val textTypeView: TextView = view.findViewById(R.id.item_type_poke)
+            textTypeView.text = typesItem.type?.name
+        }
         pokeApiService = PokeApiProvider.providePokeApiService()
         pokemonRepository = PokemonRepository(pokeApiService)
         pokeViewModelFactory = PokeViewModelFactory(pokemonRepository, pokeApiService)
