@@ -86,4 +86,7 @@ dependencies {
 
     // Chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    // progress
+//    implementation 'com.akexorcist:round-corner-progress-bar:2.2.1'
 }

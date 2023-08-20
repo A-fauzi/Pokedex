@@ -1,8 +1,6 @@
 package com.afauzi.pokedex.presentation.view.detail.fragment
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.afauzi.pokedex.R
 import com.afauzi.pokedex.data.datasource.remote.PokeApiProvider
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
-import com.afauzi.pokedex.data.repository_implement.PokemonRepository
+import com.afauzi.pokedex.data.repository.PokemonRepository
 import com.afauzi.pokedex.databinding.FragmentStatisticsPokeBinding
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
 import com.afauzi.pokedex.presentation.presenter.viewmodelfactory.PokeViewModelFactory

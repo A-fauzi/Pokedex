@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.afauzi.pokedex.data.datasource.remote.PokeApiProvider
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
-import com.afauzi.pokedex.data.repository_implement.PokemonRepository
+import com.afauzi.pokedex.data.repository.PokemonRepository
 import com.afauzi.pokedex.databinding.FragmentInforPokeBinding
 import com.afauzi.pokedex.domain.entity.PokeDetail
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel

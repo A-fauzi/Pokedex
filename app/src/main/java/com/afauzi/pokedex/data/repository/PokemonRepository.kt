@@ -1,4 +1,4 @@
-package com.afauzi.pokedex.data.repository_implement
+package com.afauzi.pokedex.data.repository
 
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
 import com.afauzi.pokedex.domain.entity.PokeAbility

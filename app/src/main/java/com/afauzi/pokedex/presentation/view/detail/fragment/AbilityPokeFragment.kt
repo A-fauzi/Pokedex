@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.afauzi.pokedex.R
 import com.afauzi.pokedex.data.datasource.remote.PokeApiProvider
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
-import com.afauzi.pokedex.data.repository_implement.PokemonRepository
+import com.afauzi.pokedex.data.repository.PokemonRepository
 import com.afauzi.pokedex.databinding.FragmentAbilityPokeBinding
 import com.afauzi.pokedex.domain.entity.AbilitiesItem
 import com.afauzi.pokedex.domain.entity.PokeAbility

@@ -1,13 +1,9 @@
-package com.afauzi.pokedex.data.repository_implement
+package com.afauzi.pokedex.data.repository
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
 import com.afauzi.pokedex.domain.entity.Pokemon
-import com.afauzi.pokedex.domain.entity.PokemonList
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class PokemonPagingSource(private val pokeApiService: PokeApiService) :
     PagingSource<Int, Pokemon>() {

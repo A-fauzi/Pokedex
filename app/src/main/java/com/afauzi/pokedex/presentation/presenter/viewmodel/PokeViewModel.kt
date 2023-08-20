@@ -9,8 +9,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
-import com.afauzi.pokedex.data.repository_implement.PokemonPagingSource
-import com.afauzi.pokedex.data.repository_implement.PokemonRepository
+import com.afauzi.pokedex.data.repository.PokemonPagingSource
+import com.afauzi.pokedex.data.repository.PokemonRepository
 import com.afauzi.pokedex.domain.entity.PokeAbility
 import com.afauzi.pokedex.domain.entity.PokeDetail
 import kotlinx.coroutines.launch

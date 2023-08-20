@@ -1,8 +1,6 @@
 package com.afauzi.pokedex.presentation.view.main.fragment
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,19 +9,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
-import androidx.paging.LoadStateAdapter
-import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.GridLayoutManager
 import com.afauzi.pokedex.R
 import com.afauzi.pokedex.data.datasource.remote.PokeApiProvider
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
-import com.afauzi.pokedex.data.repository_implement.PokemonRepository
+import com.afauzi.pokedex.data.repository.PokemonRepository
 import com.afauzi.pokedex.databinding.FragmentHomeBinding
 import com.afauzi.pokedex.domain.entity.Pokemon
 import com.afauzi.pokedex.presentation.adapter.AdapterPokePaging
@@ -33,8 +27,6 @@ import com.afauzi.pokedex.presentation.presenter.viewmodelfactory.PokeViewModelF
 import com.afauzi.pokedex.presentation.view.detail.PokemonDetailActivity
 import com.afauzi.pokedex.utils.Helpers
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import kotlinx.coroutines.launch
 
 /**

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.afauzi.pokedex.R
 import com.afauzi.pokedex.data.datasource.remote.PokeApiProvider
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
-import com.afauzi.pokedex.data.repository_implement.PokemonRepository
+import com.afauzi.pokedex.data.repository.PokemonRepository
 import com.afauzi.pokedex.databinding.ActivityPokemonDetailBinding
 import com.afauzi.pokedex.domain.entity.PokeDetail
 import com.afauzi.pokedex.domain.entity.TypesItem

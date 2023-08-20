@@ -3,7 +3,7 @@ package com.afauzi.pokedex.presentation.presenter.viewmodelfactory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.afauzi.pokedex.data.datasource.remote.PokeApiService
-import com.afauzi.pokedex.data.repository_implement.PokemonRepository
+import com.afauzi.pokedex.data.repository.PokemonRepository
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
 
 /**
