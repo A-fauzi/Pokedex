@@ -202,9 +202,6 @@
                     android:id="@+id/speed"
                     layout="@layout/item_layout_base_state" />
 
-                <include
-                    layout="@layout/item_layout_base_state" />
-
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
