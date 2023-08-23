@@ -225,9 +225,13 @@
                     android:textStyle="bold" />
 
 
-                <include layout="@layout/item_abilities_desc" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_abilities"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/item_abilities_desc"
+                    tools:itemCount="2"/>
 
-                <include layout="@layout/item_abilities_desc" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>

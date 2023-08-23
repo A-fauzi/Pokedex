@@ -22,8 +22,10 @@ import com.afauzi.pokedex.data.repository.PokemonRepository
 import com.afauzi.pokedex.databinding.FragmentComparePokemonBinding
 import com.afauzi.pokedex.databinding.ItemComparisonPokeBinding
 import com.afauzi.pokedex.databinding.ItemPokeLayoutBinding
+import com.afauzi.pokedex.domain.entity.AbilitiesItem
 import com.afauzi.pokedex.domain.entity.PokeDetail
 import com.afauzi.pokedex.domain.entity.Pokemon
+import com.afauzi.pokedex.presentation.adapter.AdapterChip
 import com.afauzi.pokedex.presentation.adapter.AdapterPokePaging
 import com.afauzi.pokedex.presentation.adapter.loadstateadapter.LoadStateAdapterPokemon
 import com.afauzi.pokedex.presentation.presenter.viewmodel.PokeViewModel
@@ -251,7 +253,6 @@ class ComparePokemon : Fragment() {
         }
     }
 
-
     private fun bindBaseStats(item: ItemComparisonPokeBinding) {
         item.hp.tvTitleStats.text = getString(R.string.hp)
         item.attack.tvTitleStats.text = getString(R.string.attck)
@@ -260,6 +261,5 @@ class ComparePokemon : Fragment() {
         item.spDefense.tvTitleStats.text = getString(R.string.sp_defense)
         item.speed.tvTitleStats.text = getString(R.string.speed)
     }
-
 
 }
