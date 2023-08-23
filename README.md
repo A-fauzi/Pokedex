@@ -30,7 +30,7 @@
 
 ## Kontribusi
 
-- Nama Depan Belakang ([@A-fauzi](https://github.com/A-fauzi))
+- Akhmad Fauzi ([@A-fauzi](https://github.com/A-fauzi))
 
 ## Lisensi
 
