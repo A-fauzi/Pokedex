@@ -1,37 +1,50 @@
-**Proyek PokeZi: Eksplorasi Menarik Dunia Pokémon**
+**PokeZi Project: Exploring the Pokémon World with Some Seriously Cool Style**
 
-![Logo PokeZi](https://i.pinimg.com/564x/24/5f/d4/245fd454682f418bbd109de16c797e13.jpg)
+![PokeZi Demo](image/home.gif)
+![PokeZi Demo](image/detail.gif)
 
-## Fitur
+Hey there, folks! Welcome to the awesome PokeZi Project documentation! This cool app is here to take you on an exciting journey into the Pokémon world like you've never experienced before. Using cutting-edge technologies like the Pokemon API, MVVM, Clean Architecture, Paging 3, Retrofit, Glide, and MPAndroidChart, PokeZi is geared up to provide an exhilarating experience for all you Pokémon fans out there.
 
-- **Pokedex Lengkap**: Temukan berbagai informasi lengkap tentang Pokémon, termasuk tipe, statistik, dan deskripsi.
+## Key Highlights
 
-- **Eksplorasi Interaktif**: Jelajahi Pokémon satu per satu dengan animasi swipe yang mulus dan tampilan detail yang informatif.
+- **Slick Pokedex**: Check out the complete list of Pokémon with all the nitty-gritty details like types, stats, and fascinating descriptions.
 
-- **Grafik Statistik**: Nikmati visualisasi grafik statistik yang interaktif dan menarik menggunakan MPAndroidChart.
+- **Engaging Exploration**: Dive into each Pokémon with smooth swipe animations and in-depth, info-packed detail views.
 
-- **Paging Efisien**: Manfaatkan Paging 3 untuk memuat daftar Pokémon secara efisien dengan respons gulir yang lancar.
+- **Cool Stat Graphics**: Jazz up your information with interactive stat graphics courtesy of MPAndroidChart.
 
-## Teknologi
+- **Seeing Pokémon**: Browse through the Pokémon roster like a breeze using the slick Paging 3.
 
-- **Pokemon API**: Gunakan Pokemon API untuk memperoleh data terkini mengenai beragam spesies Pokémon.
+## Technologies at Play
 
-- **MVVM (Model-View-ViewModel)**: Terapkan arsitektur MVVM untuk memisahkan logika bisnis dari antarmuka pengguna.
+- **Pokemon API**: Hook up with the Pokemon API to get the latest scoop on all sorts of Pokémon species.
 
-- **Clean Architecture**: Susun proyek sesuai prinsip Clean Architecture untuk meningkatkan skalabilitas dan kemudahan pemeliharaan.
+- **MVVM (Model-View-ViewModel)**: Get smart with the MVVM architecture to keep the complex stuff separate from the slick user interface.
 
-- **Paging 3**: Implementasikan Paging 3 untuk membagi hasil query menjadi bagian-bagian yang dapat dimuat dengan efisien.
+- **Clean Architecture**: Keep the project organized with some Clean Architecture goodness to amp up scalability and make maintenance a breeze.
 
-- **Retrofit**: Komunikasikan dengan Pokemon API menggunakan Retrofit dengan efisiensi tinggi.
+- **Paging 3**: Make perusing the Pokémon list a joy with the help of Paging 3, keeping things smooth and lightweight.
 
-- **Glide**: Muat dan tampilkan gambar Pokémon dengan cepat dan hemat memori menggunakan Glide.
+- **Retrofit**: Communicate with the Pokemon API seamlessly and efficiently with Retrofit.
 
-- **MPAndroidChart**: Buat grafik statistik interaktif dan informatif dengan bantuan MPAndroidChart.
+- **Glide**: Load up and show off those Pokémon images lightning-fast and memory-friendly with Glide.
 
-## Kontribusi
+- **MPAndroidChart**: Amp up the coolness factor by creating some eye-catching statistical visualizations with MPAndroidChart.
+
+## Demo
+
+Curious to see PokeZi in action? Check out this awesome demo:
+
+![PokeZi Demo](link_to_demo_gif)
+
+## Contributions
+
+We're all ears for contributions from all you fine folks out there. If you've got something to add, just throw in a pull request, and we'll be stoked to dive in and merge it.
+
+## Development Team
 
 - Akhmad Fauzi ([@A-fauzi](https://github.com/A-fauzi))
 
-## Lisensi
+## License
 
-Proyek ini berada di bawah Lisensi MIT - silakan merujuk ke berkas [LICENSE](LICENSE) untuk informasi lebih lanjut.
+This project is licensed under the MIT License
