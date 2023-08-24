@@ -1,6 +1,6 @@
 **PokeZi Project: Exploring the Pokémon World with Some Seriously Cool Style**
 
-<img src="image/home.gif" alt="detail" width="300"/>
+<img src="image/home.gif" alt="home" width="300"/>
 <img src="image/detail.gif" alt="detail" width="300"/>
 
 Hey there, folks! Welcome to the awesome PokeZi Project documentation! This cool app is here to take you on an exciting journey into the Pokémon world like you've never experienced before. Using cutting-edge technologies like the Pokemon API, MVVM, Clean Architecture, Paging 3, Retrofit, Glide, and MPAndroidChart, PokeZi is geared up to provide an exhilarating experience for all you Pokémon fans out there.
@@ -30,12 +30,6 @@ Hey there, folks! Welcome to the awesome PokeZi Project documentation! This cool
 - **Glide**: Load up and show off those Pokémon images lightning-fast and memory-friendly with Glide.
 
 - **MPAndroidChart**: Amp up the coolness factor by creating some eye-catching statistical visualizations with MPAndroidChart.
-
-## Demo
-
-Curious to see PokeZi in action? Check out this awesome demo:
-
-![PokeZi Demo](link_to_demo_gif)
 
 ## Contributions
 
