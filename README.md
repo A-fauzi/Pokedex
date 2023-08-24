@@ -1,7 +1,7 @@
 **PokeZi Project: Exploring the Pokémon World with Some Seriously Cool Style**
 
 ![PokeZi Demo](image/home.gif)
-![PokeZi Demo](image/detail.gif)
+<img src="image/detail.gif" alt="detail" width="300"/>
 
 Hey there, folks! Welcome to the awesome PokeZi Project documentation! This cool app is here to take you on an exciting journey into the Pokémon world like you've never experienced before. Using cutting-edge technologies like the Pokemon API, MVVM, Clean Architecture, Paging 3, Retrofit, Glide, and MPAndroidChart, PokeZi is geared up to provide an exhilarating experience for all you Pokémon fans out there.
 
